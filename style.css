@@ -1,0 +1,270 @@
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400;500;700&display=swap');
+*
+{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Ubuntu', sans-serif;
+}
+:root
+{
+    --black: #2f2f2f;
+    --white: #fff;
+    --blue: #378aff;
+}
+.main
+{
+    position: relative;
+    min-height: 100vh;
+    background: linear-gradient(#1c1c1c, #323232);
+    padding: 30px 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+.center
+{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 400px;
+    background: rgba(255, 255, 255, .75);
+    border-radius: 10px;
+    box-shadow: 10px 10px 15px rgba(0,0,0,0.05);
+}
+.center h1
+{
+    text-align: center;
+    padding: 20px 0;
+    border-bottom: 1px solid rgb(192, 192, 192);
+}
+.center form
+{
+    padding: 0 40px;
+    box-sizing: border-box;
+}
+form .txt_field
+{
+    position: relative;
+    border-bottom: 2px solid #474747;
+    margin: 30px 0;
+}
+.txt_field input
+{
+    width: 100%;
+    padding: 0 5px;
+    height: 40px;
+    font-size: 16px;
+    border: none;
+    background: none;
+    outline: none;
+}
+.txt_field label
+{
+    position: absolute;
+    top: 50%;
+    left: 5px;
+    color: #474747;
+    transform: translateY(-50%);
+    font-size: 16px;
+    pointer-events: none;
+    transition: .5s;
+}
+.txt_field span::before
+{
+    content: '';
+    position: absolute;
+    top: 40px;
+    left: 0;
+    width: 0%;
+    height: 2px;
+    background: var(--blue);
+    transition: .5s;
+}
+.txt_field input:focus ~ label,
+.txt_field input:valid ~ label
+{
+    top: -5px;
+    color: var(--blue);
+}
+.txt_field input:focus ~ span::before,
+.txt_field input:valid ~ span::before
+{
+    width: 100%;
+}
+.pass
+{
+    margin: -5px 0 20px 5px;
+    color: #474747;
+    cursor: pointer;
+}
+.pass:hover
+{
+    text-decoration: underline;
+}
+input[type="submit"]
+{
+    width: 100%;
+    height: 50px;
+    border: 1px solid;
+    background: var(--blue);
+    border-radius: 25px;
+    font-size: 18px;
+    color: #e9f4fb;
+    font-weight: 700;
+    cursor: pointer;
+    outline: none;
+}
+input[type="submit"]:hover
+{
+    border-color: var(--blue);
+    transition: .5s;
+}
+.signup_link
+{
+    margin: 30px 0;
+    text-align: center;
+    font-size: 16px;
+    color: #666666;
+}
+.signup_link a
+{
+    color: var(--blue);
+    text-decoration: none;
+}
+.signup_link a:hover
+{
+    text-decoration: underline;
+}
+.calendar
+{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 400px;
+    background: rgba(255, 255, 255, .75);
+    border-radius: 10px;
+    box-shadow: 10px 10px 15px rgba(0,0,0,0.05);
+}
+.calendar-header 
+{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 25px;
+    font-weight: 600;
+    color: var(--color-txt);
+    padding: 10px;
+}
+.calendar-body 
+{
+    padding: 10px;
+}
+.calendar-week-day 
+{
+    height: 50px;
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    font-weight: 600;
+}
+.calendar-week-day div 
+{
+    display: grid;
+    place-items: center;
+    color: var(--bg-second);
+}
+.calendar-days 
+{
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 2px;
+    color: var(--color-txt);
+}
+.calendar-days div 
+{
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5px;
+    position: relative;
+    cursor: pointer;
+    animation: to-top 1s forwards;
+}
+.calendar-days div span 
+{
+    position: absolute;
+}
+.calendar-days div.curr-date,
+.calendar-days div.curr-date:hover 
+{
+    background-color: var(--blue);
+    color: var(--white);
+    border-radius: 50%;
+}
+.month-picker 
+{
+    padding: 5px 10px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+.month-picker:hover 
+{
+    background-color: var(--color-hover);
+}
+.year-picker 
+{
+    display: flex;
+    align-items: center;
+}
+.year-change 
+{
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    margin: 0 10px;
+    cursor: pointer;
+}
+.year-change:hover 
+{
+    background-color: var(--color-hover);
+}
+.month-list 
+{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background-color: var(--bg-main);
+    padding: 20px;
+    grid-template-columns: repeat(3, auto);
+    gap: 5px;
+    display: grid;
+    transform: scale(1.5);
+    visibility: hidden;
+    pointer-events: none;
+}
+.month-list.show 
+{
+    transform: scale(1);
+    visibility: visible;
+    pointer-events: visible;
+    transition: all 0.2s ease-in-out;
+}
+.month-list > div > div 
+{
+    width: 100%;
+    padding: 5px 20px;
+    border-radius: 10px;
+    text-align: center;
+    cursor: pointer;
+    color: var(--color-txt);
+}
+
