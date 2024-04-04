@@ -71,6 +71,12 @@ body {
           flex-direction: column;
 }
 
+#logo-image{
+  height: 2%;
+  width: 2%;
+  margin-left: 25px;
+}
+
 .sub_page .hero_area {
   min-height: auto;
 }
@@ -105,6 +111,15 @@ a:focus {
 a:hover,
 a:focus {
   color: initial;
+}
+
+#login-link{
+  color: white;
+  transition: color 0.3s ease;
+}
+
+#login-link:hover{
+  color: var(--blue);
 }
 
 .btn,
@@ -502,36 +517,46 @@ a:focus {
   color: black;
 }
 
-.contact_section .form_container input {
-  width: 100%;
-  border: none;
-  height: 50px;
-  margin-bottom: 25px;
-  padding-left: 15px;
-  outline: none;
-  color: #101010;
-  -webkit-box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.05);
-          box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.05);
+form
+{
+    margin-right: 20%;
+    box-sizing: border-box;
 }
 
-.contact_section .form_container input::-webkit-input-placeholder {
-  color: #333;
+form .txt_field
+{
+    position: relative;
+    border-bottom: 2px solid #474747;
+    margin: 30px 0;
 }
 
-.contact_section .form_container input:-ms-input-placeholder {
-  color: #333;
+.txt_field input
+{
+    width: 100%;
+    padding: 0 5px;
+    height: 40px;
+    font-size: 16px;
+    border: none;
+    background: none;
+    outline: none;
 }
 
-.contact_section .form_container input::-ms-input-placeholder {
-  color: #333;
+.txt_field span::before
+{
+    content: '';
+    position: absolute;
+    top: 40px;
+    left: 0;
+    width: 0%;
+    height: 2px;
+    background: var(--blue);
+    transition: .5s;
 }
 
-.contact_section .form_container input::placeholder {
-  color: #333;
-}
-
-.contact_section .form_container input.message-box {
-  height: 120px;
+.txt_field input:focus ~ span::before,
+.txt_field input:valid ~ span::before
+{
+    width: 100%;
 }
 
 .contact_section .form_container button {
