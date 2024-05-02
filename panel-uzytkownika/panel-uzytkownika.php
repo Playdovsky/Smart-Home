@@ -17,41 +17,47 @@
     <body>
         <!-- Navigation-->
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-            <div class="container px-4 px-lg-0">
+            <div class="container px-5 ms-xl-2">
                 <img src="../images/fevicon.png" id="logo-image">
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
-                    <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-2">
-                        <?php
-                            session_start();
-                            $user_id = $_SESSION['user_id'];
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-2">
 
-                            $servername = "localhost";
-                            $username = "2025_mpalka21";
-                            $password = "palka_majczyk";
-                            $dbname = "2025_mpalka21";
+                    <?php
+                        session_start();
+                        $user_id = $_SESSION['user_id'];
 
-                            $conn = new mysqli($servername, $username, $password, $dbname);
+                        $servername = "localhost";
+                        $username = "2025_mpalka21";
+                        $password = "palka_majczyk";
+                        $dbname = "2025_mpalka21";
 
-                            $query = "SELECT Imie FROM tbl_Uzytkownicy WHERE ID_Uzytkownika = '$user_id'";
-                            $result = $conn->query($query);
-                            $row = $result->fetch_assoc();
-                            $user_name = $row['Imie'];
+                        $conn = new mysqli($servername, $username, $password, $dbname);
 
-                            echo "<li class='nav-item'><a class='nav-link active' aria-current='page' href='#!'><b>$user_name</b></a></li>";
-                        ?>
-                        <li class="nav-item"><a class="nav-link active" aria-current="page" href="#!"><b>Zgłoś błąd</b></a></li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle text-white" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><b>Urządzenia</b></a>
-                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <li><a class="dropdown-item" href="#!">Dodaj</a></li>
-                                <li><a class="dropdown-item" href="#!">Modyfikuj</a></li>
-                                <li><a class="dropdown-item" href="#!">Usuń</a></li>
-                            </ul>
-                        </li>
-                    </ul>
+                        $query = "SELECT Imie FROM tbl_Uzytkownicy WHERE ID_Uzytkownika = '$user_id'";
+                        $result = $conn->query($query);
+                        $row = $result->fetch_assoc();
+                        $user_name = $row['Imie'];
+
+                        echo "<li class='nav-item'><a class='nav-link active' aria-current='page' href='#!'><b>$user_name</b></a></li>";
+                    ?>
+
+                    <li class="nav-item"><a class="nav-link active" aria-current="page" href="#!"><b>Zgłoś błąd</b></a></li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle text-white" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><b>Urządzenia</b></a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="#!">Dodaj</a></li>
+                            <li><a class="dropdown-item" href="#!">Modyfikuj</a></li>
+                            <li><a class="dropdown-item" href="#!">Usuń</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="mx-md-5">
                 <form method="post">
-                    <button type="submit" class="text-white" name="logout"><b>Wyloguj się</b></button>
+                    <input type="submit" id="wylogowanie" value="Wyloguj się" name="logout">
                 </form>
+
                 <?php
                     session_start();
 
@@ -59,11 +65,10 @@
                         $_SESSION = array();
                         session_destroy();
 
-                        header("Location: ../index.html");
+                        header("Location: ../index.php");
                         exit();
                     }
                 ?>
-
             </div>
         </nav>
         <!-- Header-->
