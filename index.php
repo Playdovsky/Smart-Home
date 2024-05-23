@@ -19,7 +19,7 @@
     <!-- Custom styles for this template -->
     <link href="css/style.css" rel="stylesheet" />
     <!-- responsive style -->
-    <link href="css/responsive.css" rel="stylesheet" />
+    <link href="css/responsive.css?v=1.0" rel="stylesheet" />
   </head>
 
   <body>
@@ -28,12 +28,11 @@
       <header class="header_section long_section px-0">
         <nav class="navbar navbar-expand-lg custom_nav-container">
           <img src="images/fevicon.png" id="logo-image">
-          <a class="navbar-brand" href="index.html">
+          <a class="navbar-brand" href="index.php">
             <span>
               SMART FUTURE
             </span>
           </a>
-          <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <div class="d-flex mx-auto flex-column flex-lg-row align-items-center">
             </div>
             <div class="quote_btn-container">
@@ -43,7 +42,6 @@
                 </span>
               </a>
             </div>
-          </div>
         </nav>
       </header>
       <!-- end header section -->
@@ -157,7 +155,7 @@
               </div>
               <div class="detail-box">
                 <h5>
-                  Viedo Dzwonek do drzwi
+                  Video Dzwonek do drzwi
                 </h5>
               </div>
             </div>

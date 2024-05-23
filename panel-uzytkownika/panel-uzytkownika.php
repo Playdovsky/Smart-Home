@@ -13,12 +13,14 @@
         <link rel="icon" href="../images/fevicon.png" type="image/gif" />
         <link href="../css/font-awesome.min.css" rel="stylesheet" />
         <link href="../css/style.css" rel="stylesheet" />
+        <link href="../css/responsive.css?v=1.0" rel="stylesheet" />
+        <!--<link href="css/styles.css" rel="stylesheet" />-->
     </head>
     <body>
         <!-- Navigation-->
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
             <div class="container px-5 ms-xl-2">
-                <img src="../images/fevicon.png" id="logo-image">
+                <img src="../images/fevicon.png" id="logo-image" class="img-fluid">
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-2">
 
@@ -82,113 +84,65 @@
         </header>
         <!-- Section-->
         <section class="py-5">
-            <div class="container px-4 px-lg-5 mt-5">
-                <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-3 justify-content-center">
-                    <div class="col mb-5">
-                        <div class="card h-100">
-                            <!-- Product image-->
-                            <img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..." />
-                            <!-- Product details-->
-                            <div class="card-body p-4">
-                                <div class="text-center">
-                                    <!-- Product name-->
-                                    <h5 class="fw-bolder text-black">Urządzenie #1</h5>
+
+            <?php
+                session_start();
+                $user_id = $_SESSION['user_id'];
+
+                $servername = "localhost";
+                $username = "2025_mpalka21";
+                $password = "palka_majczyk";
+                $dbname = "2025_mpalka21";
+
+                $conn = new mysqli($servername, $username, $password, $dbname);
+
+                if ($conn->connect_error) {
+                    die("Connection failed: " . $conn->connect_error);
+                }
+
+                $sql = "SELECT ss.Nazwa 
+                        FROM tbl_SprzetUzytkownikow su 
+                        JOIN tbl_SprzetSmart ss 
+                        ON su.ID_SprzetSmart = ss.ID_SprzetSmart 
+                        WHERE su.ID_Uzytkownika = ?";
+
+                $stmt = $conn->prepare($sql);
+                $stmt->bind_param("i", $user_id);
+                $stmt->execute();
+                $result = $stmt->get_result();
+
+                if ($result->num_rows > 0) {
+                    echo '<div class="container px-4 px-lg-5 mt-5">';
+                    echo '<div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-3 justify-content-center">';
+                    while($row = $result->fetch_assoc()) {
+                        echo '<div class="col mb-5">
+                                <div class="card h-100">
+                                    <!-- Product image-->
+                                    <img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..." />
+                                    <!-- Product details-->
+                                    <div class="card-body p-4">
+                                        <div class="text-center">
+                                            <!-- Product name-->
+                                            <h5 class="fw-bolder text-black">' . htmlspecialchars($row['Nazwa']) . '</h5>
+                                        </div>
+                                    </div>
+                                    <!-- Product actions-->
+                                    <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                                        <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">Opcje</a></div>
+                                    </div>
                                 </div>
-                            </div>
-                            <!-- Product actions-->
-                            <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                                <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">Opcje</a></div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col mb-5">
-                        <div class="card h-100">
-                            <!-- Product image-->
-                            <img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..." />
-                            <!-- Product details-->
-                            <div class="card-body p-4">
-                                <div class="text-center">
-                                    <!-- Product name-->
-                                    <h5 class="fw-bolder text-black">Urządzenie #2</h5>
-                                </div>
-                            </div>
-                            <!-- Product actions-->
-                            <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                                <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">Opcje</a></div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col mb-5">
-                        <div class="card h-100">
-                            <!-- Product image-->
-                            <img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..." />
-                            <!-- Product details-->
-                            <div class="card-body p-4">
-                                <div class="text-center">
-                                    <!-- Product name-->
-                                    <h5 class="fw-bolder text-black">Urządzenie #3</h5>
-                                </div>
-                            </div>
-                            <!-- Product actions-->
-                            <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                                <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">Opcje</a></div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col mb-5">
-                        <div class="card h-100">
-                            <!-- Product image-->
-                            <img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..." />
-                            <!-- Product details-->
-                            <div class="card-body p-4">
-                                <div class="text-center">
-                                    <!-- Product name-->
-                                    <h5 class="fw-bolder text-black">Urządzenie #4</h5>
-                                    <!-- Product reviews-->
-                                </div>
-                            </div>
-                            <!-- Product actions-->
-                            <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                                <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">Opcje</a></div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col mb-5">
-                        <div class="card h-100">
-                            <!-- Product image-->
-                            <img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..." />
-                            <!-- Product details-->
-                            <div class="card-body p-4">
-                                <div class="text-center">
-                                    <!-- Product name-->
-                                    <h5 class="fw-bolder text-black">Urządzenie #5</h5>
-                                </div>
-                            </div>
-                            <!-- Product actions-->
-                            <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                                <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">Opcje</a></div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col mb-5">
-                        <div class="card h-100">
-                            <!-- Product image-->
-                            <img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..." />
-                            <!-- Product details-->
-                            <div class="card-body p-4">
-                                <div class="text-center">
-                                    <!-- Product name-->
-                                    <h5 class="fw-bolder text-black">Urządzenie #6</h5>
-                                </div>
-                            </div>
-                            <!-- Product actions-->
-                            <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                                <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">Opcje</a></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+                            </div>';
+                    }
+                    echo '</div>';
+                    echo '</div>';
+                } else {
+                    echo "Brak urządzeń dla tego użytkownika.";
+                }
+
+                $stmt->close();
+                $conn->close();
+            ?>
+            
         </section>
         <!-- Footer-->
         <footer class="py-3 bg-dark">

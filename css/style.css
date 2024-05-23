@@ -71,12 +71,6 @@ body {
           flex-direction: column;
 }
 
-#logo-image{
-  height: 2%;
-  width: 2%;
-  margin-left: 25px;
-}
-
 .sub_page .hero_area {
   min-height: auto;
 }
@@ -142,6 +136,7 @@ a:focus {
   color: white;
   margin-left: 25px;
   text-transform: uppercase;
+  text-align: left;
 }
 
 .custom_nav-container {
