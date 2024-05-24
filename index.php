@@ -19,7 +19,7 @@
     <!-- Custom styles for this template -->
     <link href="css/style.css" rel="stylesheet" />
     <!-- responsive style -->
-    <link href="css/responsive.css?v=1.0" rel="stylesheet" />
+    <link href="css/responsive.css" rel="stylesheet" />
   </head>
 
   <body>
@@ -28,11 +28,12 @@
       <header class="header_section long_section px-0">
         <nav class="navbar navbar-expand-lg custom_nav-container">
           <img src="images/fevicon.png" id="logo-image">
-          <a class="navbar-brand" href="index.php">
+          <a class="navbar-brand" href="index.html">
             <span>
               SMART FUTURE
             </span>
           </a>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <div class="d-flex mx-auto flex-column flex-lg-row align-items-center">
             </div>
             <div class="quote_btn-container">
@@ -42,6 +43,7 @@
                 </span>
               </a>
             </div>
+          </div>
         </nav>
       </header>
       <!-- end header section -->
@@ -155,7 +157,7 @@
               </div>
               <div class="detail-box">
                 <h5>
-                  Video Dzwonek do drzwi
+                  Viedo Dzwonek do drzwi
                 </h5>
               </div>
             </div>
@@ -354,76 +356,35 @@
               </div>
               <form method="post" action="">
                 <div class="txt_field">
-                  <input type="text" placeholder="Imię" name="imie" required/>
+                  <input type="text" placeholder="Imię" required/>
                   <span></span>
                 </div>
                 <div class="txt_field">
-                  <input type="text" placeholder="Numer tel." name="nrtel" required/>
+                  <input type="text" placeholder="Numer tel." required/>
                   <span></span>
                 </div>
                 <div class="txt_field">
-                  <input type="email" placeholder="Email" name="email" required/>
+                  <input type="email" placeholder="Email" required/>
                   <span></span>
                 </div>
                 <div class="txt_field">
-                  <input type="text" class="message-box" placeholder="Wiadomość" name="wiadomosc" required/>
+                  <input type="text" class="message-box" placeholder="Wiadomość" required/>
                   <span></span>
                 </div>
                 <div class="btn_box">
-                <button>Wyślij</button>
+                  <button>
+                    Wyślij
+                  </button>
                 </div>
               </form>
-
-              <?php
-                if ($_SERVER["REQUEST_METHOD"] == "POST"){
-                  $servername = "localhost";
-                  $username = "2025_mpalka21";
-                  $password = "palka_majczyk";
-                  $dbname = "2025_mpalka21";
-
-                  try{
-                    $conn = new mysqli($servername, $username, $password, $dbname);
-  
-                    $imie = $_POST['imie'];
-                    $nrtel = $_POST['nrtel'];
-                    $email = $_POST['email'];
-                    $wiadomosc = $_POST['wiadomosc'];
-
-                    $nrtel2 = str_replace([' ', '-'], '', $nrtel);
-
-                    if (!preg_match("/^[0-9]{9}$/", $nrtel2)) {
-                      throw new Exception("Nieprawidłowy numer telefonu.");
-                    }
-  
-                    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                      throw new Exception("Nieprawidłowy adres email.");
-                    }  
-
-                    $kontakt_insert = $conn->prepare("INSERT INTO tbl_Kontakt (Imie, NrTelefonu, Email, Wiadomosc) VALUES (?, ?, ?, ?)");
-                    $kontakt_insert->bind_param("ssss", $imie, $nrtel2, $email, $wiadomosc);
-                    $kontakt_insert->execute();
-
-                    echo "<script>
-                    window.onload = function() {
-                      alert('Wiadomość kontaktowa wysłana!');
-                      window.location.href = 'index.php';
-                    }
-                    </script>";
-                    
-                    $kontakt_insert->close();
-                    $conn->close();
-                  }catch (Exception $e) {
-                    echo "<p style='color: red; text-align: left; margin-bottom: 10px;'><b>".$e->getMessage()."</b></p>";
-                  }
-                }
-              ?>
-
             </div>
           </div>
           <div class="col-md-6">
             <div class="map_container">
               <div class="map">
-                <div id="googleMap"></div>
+                <div id="googleMap">
+                  <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2468.7005685745594!2d19.463046812042574!3d51.77508097175813!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x471bcb27e88bf415%3A0x8b2890d178bb78c2!2sPolskiej%20Organizacji%20Wojskowej%203%2F5%2C%2090-255%20%C5%81%C3%B3d%C5%BA!5e0!3m2!1spl!2spl!4v1716507547357!5m2!1spl!2spl" width="500" height="500" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                </div>
               </div>
             </div>
           </div>
@@ -437,22 +398,23 @@
 
       <div class="container">
         <div class="contact_nav">
-          <a href="">
+          <a href="tel:48572797538">
             <i class="fa fa-phone" aria-hidden="true"></i>
             <span>
               +48 572-797-538
             </span>
           </a>
-          <a href="">
+          <a href="mailto:SmartFuture@gmail.com">
             <i class="fa fa-envelope" aria-hidden="true"></i>
             <span>
               SmartFuture@gmail.com
             </span>
           </a>
-          <a href="">
+          <a href="https://maps.app.goo.gl/KXwD48rzqR5kjT7D9" target="_blank">
             <i class="fa fa-map-marker" aria-hidden="true"></i>
             <span>
-              Łódź<br>ul. Rewolucji 1905r.
+              ul. POW 3/5<br>
+              90-255 Łódź
             </span>
           </a>
         </div>
@@ -479,9 +441,6 @@
     <script src="js/bootstrap.js"></script>
     <!-- custom js -->
     <script src="js/custom.js"></script>
-    <!-- Google Map -->
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCh39n5U-4IoWpsVGUHWdqB6puEkhRLdmI&callback=myMap"></script>
-    <!-- End Google Map -->
 
   </body>
 </html>
