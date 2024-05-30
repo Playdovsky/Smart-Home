@@ -248,7 +248,6 @@
 
     <!-- end about section -->
 
-
     <!-- client section -->
 
     <section class="client_section layout_padding-bottom">
@@ -392,7 +391,7 @@
       </div>
     </section>
     <!-- end contact section -->
-
+    
     <!-- info section -->
     <section class="info_section long_section">
 
@@ -417,10 +416,25 @@
               90-255 Łódź
             </span>
           </a>
+          
         </div>
-    </section>
+      </section>
     <!-- end info_section -->
 
+    <!-- weather section -->
+
+    <section class="weather">
+      <div class="container">
+        <div id="ww_0eb4c851f9013" v='1.3' loc='auto' a='{"t":"responsive","lang":"pl","sl_lpl":1,"ids":[],"font":"Arial","sl_ics":"one_a","sl_sot":"celsius","cl_bkg":"image","cl_font":"#FFFFFF","cl_cloud":"#FFFFFF","cl_persp":"#81D4FA","cl_sun":"#FFC107","cl_moon":"#FFC107","cl_thund":"#FF5722"}'>
+          More forecasts: 
+            <a href="https://oneweather.org/warsaw/30_days/" id="ww_0eb4c851f9013_u" target="_blank">Warsaw weather 30 days</a>
+        </div>
+          <script async src="https://app2.weatherwidget.org/js/?id=ww_0eb4c851f9013">
+          </script>
+      </div>
+    </section>
+
+    <!-- end weather section -->
 
     <!-- footer section -->
     <footer class="footer_section">
