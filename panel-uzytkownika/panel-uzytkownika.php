@@ -1,4 +1,8 @@
 <html lang="en">
+    <?php
+        session_start();
+    ?>
+
     <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
@@ -13,6 +17,7 @@
         <link rel="icon" href="../images/fevicon.png" type="image/gif" />
         <link href="../css/font-awesome.min.css" rel="stylesheet" />
         <link href="../css/style.css" rel="stylesheet" />
+        <link href="css/overlay.css" rel="stylesheet" >
         <link href="../css/responsive.css?v=1.0" rel="stylesheet" />
         <!--<link href="css/styles.css" rel="stylesheet" />-->
     </head>
@@ -25,7 +30,6 @@
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-2">
 
                     <?php
-                        session_start();
                         $user_id = $_SESSION['user_id'];
 
                         $servername = "localhost";
@@ -43,7 +47,9 @@
                         echo "<li class='nav-item'><a class='nav-link active' aria-current='page' href='#!'><b>$user_name</b></a></li>";
                     ?>
 
+                    <li class="nav-item"><a class="nav-link active" id="showForm" aria-current="page" href="#"><b>Dodaj urządzenie</b></a></li>
                     <li class="nav-item"><a class="nav-link active" aria-current="page" href="#!"><b>Zgłoś błąd</b></a></li>
+                    <!--
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle text-white" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><b>Urządzenia</b></a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -52,6 +58,7 @@
                             <li><a class="dropdown-item" href="#!">Usuń</a></li>
                         </ul>
                     </li>
+                    -->
                 </ul>
             </div>
 
@@ -61,8 +68,6 @@
                 </form>
 
                 <?php
-                    session_start();
-
                     if(isset($_POST['logout'])) {
                         $_SESSION = array();
                         session_destroy();
@@ -86,7 +91,6 @@
         <section class="py-5">
 
             <?php
-                session_start();
                 $user_id = $_SESSION['user_id'];
 
                 $servername = "localhost";
@@ -111,46 +115,95 @@
                 $stmt->execute();
                 $result = $stmt->get_result();
 
-                if ($result->num_rows > 0) {
-                    echo '<div class="container px-4 px-lg-5 mt-5">';
+                echo '<div class="container px-4 px-lg-5 mt-5">';
                     echo '<div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-3 justify-content-center">';
-                    while($row = $result->fetch_assoc()) {
-                        echo '<div class="col mb-5">
-                                <div class="card h-100">
-                                    <!-- Product image-->
-                                    <img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..." />
-                                    <!-- Product details-->
-                                    <div class="card-body p-4">
-                                        <div class="text-center">
-                                            <!-- Product name-->
-                                            <h5 class="fw-bolder text-black">' . htmlspecialchars($row['Nazwa']) . '</h5>
+                        while($row = $result->fetch_assoc()) {
+                            echo '<div class="col mb-5">
+                                    <div class="card h-100">
+                                        <!-- Product image-->
+                                        <img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..." />
+                                        <!-- Product details-->
+                                        <div class="card-body p-4">
+                                            <div class="text-center">
+                                                <!-- Product name-->
+                                                <h5 class="fw-bolder text-black">' . htmlspecialchars($row['Nazwa']) . '</h5>
+                                            </div>
+                                        </div>
+                                        <!-- Product actions-->
+                                        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                                            <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">Opcje</a></div>
                                         </div>
                                     </div>
-                                    <!-- Product actions-->
-                                    <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                                        <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">Opcje</a></div>
-                                    </div>
-                                </div>
-                            </div>';
-                    }
+                                </div>';
+                        }
                     echo '</div>';
-                    echo '</div>';
-                } else {
-                    echo "Brak urządzeń dla tego użytkownika.";
-                }
+                echo '</div>';
+
 
                 $stmt->close();
                 $conn->close();
             ?>
             
         </section>
-        <!-- Footer-->
-        <footer class="py-3 bg-dark">
-            <div class="container"><p class="m-0 text-center text-white">Copyright &copy; SMART FUTURE 2024</p></div>
-        </footer>
+
+        <div id="overlay" class="d-none">
+            <div>
+                <h3>Dodaj nowe urządzenie</h3>
+                <form action="dodawanie-urzadzenia.php" method="post">
+                    <div class="mb-3">
+                        <label for="deviceName" class="form-label">Nazwa urządzenia</label>
+                        <?php
+                            ini_set('display_errors', 1);
+                            ini_set('display_startup_errors', 1);
+                            error_reporting(E_ALL);
+
+                            $user_id = $_SESSION['user_id'];
+
+                            $servername = "localhost";
+                            $username = "2025_mpalka21";
+                            $password = "palka_majczyk";
+                            $dbname = "2025_mpalka21";
+
+                            $conn = new mysqli($servername, $username, $password, $dbname);
+
+                            if ($conn->connect_error) {
+                                die("Connection failed: " . $conn->connect_error);
+                            }
+
+                            $sql = "SELECT DISTINCT Nazwa FROM tbl_SprzetSmart";
+                            $result = $conn->query($sql);
+                        ?>
+
+                        <select name="deviceName" required>
+                            <?php
+                                while($row = $result->fetch_assoc()) {
+                                    echo "<option value='" . $row['Nazwa'] . "'>" . $row['Nazwa'] . "</option>";
+                                }
+                            ?>
+                        </select>
+
+                        <?php
+                            $conn->close();
+                        ?>
+
+                    </div>
+                    <div class="mb-3">
+                        <label for="deviceNumber" class="form-label">Numer rejestracyjny</label>
+                        <input type="text" class="form-control" id="deviceNumber" name="deviceNumber" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Dodaj</button>
+                    <button type="button" id="hideForm" class="btn btn-secondary">Anuluj</button>
+                </form>
+            </div>
+        </div>
+
         <!-- Bootstrap core JS-->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
         <!-- Core theme JS-->
+        <!-- Bootstrap core JS-->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
         <script src="js/scripts.js"></script>
+        <script src="js/overlay.js"></script>
     </body>
 </html>
