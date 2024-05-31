@@ -1,4 +1,4 @@
-#overlay {
+.overlay {
     display: none;
     position: fixed;
     top: 0;
@@ -13,7 +13,7 @@
     align-items: center;
 }
 
-#overlay div {
+.overlay div {
     background-color: white;
     color: black;
     padding: 20px;

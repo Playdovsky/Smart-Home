@@ -90,63 +90,79 @@
         <!-- Section-->
         <section class="py-5">
 
-            <?php
-                $user_id = $_SESSION['user_id'];
+        <?php
+            $user_id = $_SESSION['user_id'];
 
-                $servername = "localhost";
-                $username = "2025_mpalka21";
-                $password = "palka_majczyk";
-                $dbname = "2025_mpalka21";
+            $servername = "localhost";
+            $username = "2025_mpalka21";
+            $password = "palka_majczyk";
+            $dbname = "2025_mpalka21";
 
-                $conn = new mysqli($servername, $username, $password, $dbname);
+            $conn = new mysqli($servername, $username, $password, $dbname);
 
-                if ($conn->connect_error) {
-                    die("Connection failed: " . $conn->connect_error);
-                }
+            if ($conn->connect_error) {
+                die("Connection failed: " . $conn->connect_error);
+            }
 
-                $sql = "SELECT ss.Nazwa 
-                        FROM tbl_SprzetUzytkownikow su 
-                        JOIN tbl_SprzetSmart ss 
-                        ON su.ID_SprzetSmart = ss.ID_SprzetSmart 
-                        WHERE su.ID_Uzytkownika = ?";
+            $sql = "SELECT su.ID_SprzetUzytkownika, ss.Nazwa 
+                    FROM tbl_SprzetUzytkownikow su 
+                    JOIN tbl_SprzetSmart ss 
+                    ON su.ID_SprzetSmart = ss.ID_SprzetSmart 
+                    WHERE su.ID_Uzytkownika = ?";
 
-                $stmt = $conn->prepare($sql);
-                $stmt->bind_param("i", $user_id);
-                $stmt->execute();
-                $result = $stmt->get_result();
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param("i", $user_id);
+            $stmt->execute();
+            $result = $stmt->get_result();
 
-                echo '<div class="container px-4 px-lg-5 mt-5">';
-                    echo '<div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-3 justify-content-center">';
-                        while($row = $result->fetch_assoc()) {
-                            echo '<div class="col mb-5">
-                                    <div class="card h-100">
-                                        <!-- Product image-->
-                                        <img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..." />
-                                        <!-- Product details-->
-                                        <div class="card-body p-4">
-                                            <div class="text-center">
-                                                <!-- Product name-->
-                                                <h5 class="fw-bolder text-black">' . htmlspecialchars($row['Nazwa']) . '</h5>
-                                            </div>
-                                        </div>
-                                        <!-- Product actions-->
-                                        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                                            <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">Opcje</a></div>
-                                        </div>
+            echo '<div class="container px-4 px-lg-5 mt-5">';
+                echo '<div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-3 justify-content-center">';
+                while($row = $result->fetch_assoc()) {
+                    echo '<div class="col mb-5">
+                            <div class="card h-100">
+                                <img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..." />
+                                <div class="card-body p-4">
+                                    <div class="text-center">
+                                        <h5 class="fw-bolder text-black">' . htmlspecialchars($row['Nazwa']) . '</h5>
                                     </div>
-                                </div>';
-                        }
-                    echo '</div>';
+                                </div>
+                                <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                                    <div class="text-center">
+                                        <a class="btn btn-outline-dark mt-auto showFormOptions" href="#" data-device-id="' . $row['ID_SprzetUzytkownika'] . '">Opcje</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>';
+                }
+                
                 echo '</div>';
+            echo '</div>';
 
+            $stmt->close();
+            $conn->close();
+        ?>
 
-                $stmt->close();
-                $conn->close();
-            ?>
             
         </section>
+        
+        <div id="overlayOptions" class="overlay d-none">
+            <div>
+                <h3>Opcje urządzenia</h3>
+                <form method="post">
+                    <div id="deviceOptionsContent">
+                        <!-- Tutaj zawartość jest dynamicznie pobierana z dane-urzadzen.php i bazy -->
+                    </div>
+                    <!--<button type="submit" id="" class="btn btn-primary">Zapisz</button>-->
+                    <input type="hidden" id="deviceId" name="device_id" value="<?php echo $row['ID_SprzetUzytkownika']; ?>">
+                    <button type="button" id="hideFormOptions" class="btn btn-secondary">Anuluj</button>
+                    <button type="button" id="deleteForm" class="btn btn-danger" data-device-id="">Usuń</button>
+                </form>
+            </div>
+        </div>
 
-        <div id="overlay" class="d-none">
+
+
+        <div id="overlay" class="overlay d-none">
             <div>
                 <h3>Dodaj nowe urządzenie</h3>
                 <form action="dodawanie-urzadzenia.php" method="post">
@@ -197,10 +213,7 @@
             </div>
         </div>
 
-        <!-- Bootstrap core JS-->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-        <!-- Core theme JS-->
-        <!-- Bootstrap core JS-->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
         <script src="js/scripts.js"></script>
