@@ -20,6 +20,11 @@
         <link href="css/overlay.css" rel="stylesheet" >
         <link href="../css/responsive.css?v=1.0" rel="stylesheet" />
         <!--<link href="css/styles.css" rel="stylesheet" />-->
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="js/scripts.js"></script>
+        <script src="js/overlay.js"></script>
     </head>
     <body>
         <!-- Navigation-->
@@ -90,77 +95,75 @@
         <!-- Section-->
         <section class="py-5">
 
-        <?php
-            $user_id = $_SESSION['user_id'];
+            <?php
+                $user_id = $_SESSION['user_id'];
 
-            $servername = "localhost";
-            $username = "2025_mpalka21";
-            $password = "palka_majczyk";
-            $dbname = "2025_mpalka21";
+                $servername = "localhost";
+                $username = "2025_mpalka21";
+                $password = "palka_majczyk";
+                $dbname = "2025_mpalka21";
 
-            $conn = new mysqli($servername, $username, $password, $dbname);
+                $conn = new mysqli($servername, $username, $password, $dbname);
 
-            if ($conn->connect_error) {
-                die("Connection failed: " . $conn->connect_error);
-            }
-
-            $sql = "SELECT su.ID_SprzetUzytkownika, ss.Nazwa 
-                    FROM tbl_SprzetUzytkownikow su 
-                    JOIN tbl_SprzetSmart ss 
-                    ON su.ID_SprzetSmart = ss.ID_SprzetSmart 
-                    WHERE su.ID_Uzytkownika = ?";
-
-            $stmt = $conn->prepare($sql);
-            $stmt->bind_param("i", $user_id);
-            $stmt->execute();
-            $result = $stmt->get_result();
-
-            echo '<div class="container px-4 px-lg-5 mt-5">';
-                echo '<div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-3 justify-content-center">';
-                while($row = $result->fetch_assoc()) {
-                    echo '<div class="col mb-5">
-                            <div class="card h-100">
-                                <img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..." />
-                                <div class="card-body p-4">
-                                    <div class="text-center">
-                                        <h5 class="fw-bolder text-black">' . htmlspecialchars($row['Nazwa']) . '</h5>
-                                    </div>
-                                </div>
-                                <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                                    <div class="text-center">
-                                        <a class="btn btn-outline-dark mt-auto showFormOptions" href="#" data-device-id="' . $row['ID_SprzetUzytkownika'] . '">Opcje</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>';
+                if ($conn->connect_error) {
+                    die("Connection failed: " . $conn->connect_error);
                 }
-                
+
+                $sql = "SELECT su.ID_SprzetUzytkownika, us.Nazwa 
+                        FROM tbl_SprzetUzytkownikow su 
+                        JOIN tbl_UstawieniaSprzetu us
+                        ON su.ID_SprzetUzytkownika = us.ID_SprzetUzytkownika 
+                        WHERE su.ID_Uzytkownika = ?";
+
+                $stmt = $conn->prepare($sql);
+                $stmt->bind_param("i", $user_id);
+                $stmt->execute();
+                $result = $stmt->get_result();
+
+                echo '<div class="container px-4 px-lg-5 mt-5">';
+                    echo '<div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-3 justify-content-center">';
+                    while($row = $result->fetch_assoc()) {
+                        echo '<div class="col mb-5">
+                                <div class="card h-100">
+                                    <img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..." />
+                                    <div class="card-body p-4">
+                                        <div class="text-center">
+                                            <h5 class="fw-bolder text-black">' . htmlspecialchars($row['Nazwa']) . '</h5>
+                                        </div>
+                                    </div>
+                                    <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                                        <div class="text-center">
+                                            <a class="btn btn-outline-dark mt-auto showFormOptions" href="#" data-device-id="' . $row['ID_SprzetUzytkownika'] . '">Opcje</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>';
+                    }
+                    
+                    echo '</div>';
                 echo '</div>';
-            echo '</div>';
 
-            $stmt->close();
-            $conn->close();
-        ?>
+                $stmt->close();
+                $conn->close();
+            ?>
 
-            
         </section>
         
         <div id="overlayOptions" class="overlay d-none">
             <div>
                 <h3>Opcje urządzenia</h3>
-                <form method="post">
+                <form method="post" id="deviceOptionsForm">
                     <div id="deviceOptionsContent">
-                        <!-- Tutaj zawartość jest dynamicznie pobierana z dane-urzadzen.php i bazy -->
+                        <!--Dynamicznie pobierana zawartość z dane-urzadzenia.php-->
                     </div>
-                    <!--<button type="submit" id="" class="btn btn-primary">Zapisz</button>-->
+
                     <input type="hidden" id="deviceId" name="device_id" value="<?php echo $row['ID_SprzetUzytkownika']; ?>">
+                    <button type="button" id="saveForm" class="btn btn-primary" data-device-id="">Zapisz</button>
                     <button type="button" id="hideFormOptions" class="btn btn-secondary">Anuluj</button>
                     <button type="button" id="deleteForm" class="btn btn-danger" data-device-id="">Usuń</button>
                 </form>
             </div>
         </div>
-
-
 
         <div id="overlay" class="overlay d-none">
             <div>
@@ -190,7 +193,7 @@
                             $result = $conn->query($sql);
                         ?>
 
-                        <select name="deviceName" required>
+                        <select id="deviceName" required>
                             <?php
                                 while($row = $result->fetch_assoc()) {
                                     echo "<option value='" . $row['Nazwa'] . "'>" . $row['Nazwa'] . "</option>";
@@ -213,10 +216,5 @@
             </div>
         </div>
 
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-        <script src="js/scripts.js"></script>
-        <script src="js/overlay.js"></script>
     </body>
 </html>
