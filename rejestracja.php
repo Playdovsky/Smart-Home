@@ -90,9 +90,11 @@
                   $salt2 = "Nd2t%7m!8";
                   $salted_password2 = $hashed_password.$salt2;
                   $hashed_password2 = hash('sha256', $salted_password2);
+                  
+                  $deactivated = 0;
 
-                  $user_insert = $conn->prepare("INSERT INTO tbl_Uzytkownicy (Imie, Nazwisko, NrTelefonu, Email, Haslo) VALUES (?, ?, ?, ?, ?)");
-                  $user_insert->bind_param("sssss", $imie, $nazwisko, $nrtel, $useremail, $hashed_password2);
+                  $user_insert = $conn->prepare("INSERT INTO tbl_Uzytkownicy (Imie, Nazwisko, NrTelefonu, Email, Haslo, Dezaktywowany) VALUES (?, ?, ?, ?, ?, ?)");
+                  $user_insert->bind_param("sssss", $imie, $nazwisko, $nrtel, $useremail, $hashed_password2, $deactivated);
                   $user_insert->execute();
 
                   $id_uzytkownika_query = $conn->query("SELECT ID_Uzytkownika FROM tbl_Uzytkownicy WHERE Email = '$useremail'");

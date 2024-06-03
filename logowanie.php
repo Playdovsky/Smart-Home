@@ -49,7 +49,7 @@
                 $salted_password2 = $hashed_password.$salt2;
                 $hashed_password2 = hash('sha256', $salted_password2);
 
-                $check = "SELECT * FROM tbl_Uzytkownicy WHERE Email = '$useremail' AND Haslo = '$hashed_password2'";
+                $check = "SELECT * FROM tbl_Uzytkownicy WHERE Email = '$useremail' AND Haslo = '$hashed_password2' AND Dezaktywowany = 0";
                 $result = $conn->query($check);
 
                 if($result->num_rows > 0){

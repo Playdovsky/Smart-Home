@@ -23,17 +23,15 @@
 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-        <script src="js/scripts.js"></script>
         <script src="js/overlay.js"></script>
     </head>
     <body>
         <!-- Navigation-->
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
             <div class="container px-5 ms-xl-2">
-                <img src="../images/fevicon.png" id="logo-image" class="img-fluid">
+                <a href="panel-uzytkownika.php"><img src="../images/fevicon.png" id="logo-image" class="img-fluid"></a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-2">
-
                     <?php
                         $user_id = $_SESSION['user_id'];
 
@@ -49,7 +47,7 @@
                         $row = $result->fetch_assoc();
                         $user_name = $row['Imie'];
 
-                        echo "<li class='nav-item'><a class='nav-link active' aria-current='page' href='#!'><b>$user_name</b></a></li>";
+                        echo "<li class='nav-item'><a class='nav-link active' aria-current='page' href='profil-uzytkownika.php'><b>$user_name</b></a></li>";
                     ?>
 
                     <li class="nav-item"><a class="nav-link active" id="showForm" aria-current="page" href="#"><b>Dodaj urządzenie</b></a></li>
@@ -215,6 +213,5 @@
                 </form>
             </div>
         </div>
-
     </body>
 </html>
