@@ -10,6 +10,7 @@
         <meta name="description" content="Smart Home internet application" />
         <meta name="author" content="Bartosz Majczyk, Mateusz Pałka" />
         
+        
         <title>Smart Future</title>
 
         <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />

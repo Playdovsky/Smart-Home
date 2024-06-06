@@ -11,6 +11,7 @@ document.getElementById("profileForm").addEventListener("submit", function(event
         success: function(response) {
             console.log(response);
             alert('Zmiany zostały zapisane.');
+            window.location.replace("panel-uzytkownika.php");
         },
         error: function(xhr, status, error) {
             console.error('Wystąpił błąd podczas zapisywania zmian.', xhr.responseText);
