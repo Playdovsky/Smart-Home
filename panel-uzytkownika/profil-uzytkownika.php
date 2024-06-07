@@ -10,7 +10,6 @@
         <meta name="description" content="Smart Home internet application" />
         <meta name="author" content="Bartosz Majczyk, Mateusz Pałka" />
         
-        
         <title>Smart Future</title>
 
         <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
@@ -21,7 +20,9 @@
         <link href="../css/responsive.css?v=1.0" rel="stylesheet" />
         <!--<link href="css/styles.css" rel="stylesheet" />-->
 
-
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="js/profil.js"></script>
     </head>
     <body>
         <!-- Navigation-->
@@ -49,7 +50,7 @@
                         echo "<li class='nav-item'><a class='nav-link active' aria-current='page' href='profil-uzytkownika.php'><b>$user_name</b></a></li>";
                     ?>
                     <li class="nav-item"><a class="nav-link active" id="showForm" aria-current="page" href="panel-uzytkownika.php"><b>Panel urządzeń</b></a></li>
-                    <li class="nav-item"><a class="nav-link active" aria-current="page" href="#!"><b>Zgłoś błąd</b></a></li>
+                    <li class="nav-item"><a class="nav-link active" aria-current="page" href="zglos-blad.php"><b>Zgłoś błąd</b></a></li>
                     <!--
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle text-white" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><b>Urządzenia</b></a>

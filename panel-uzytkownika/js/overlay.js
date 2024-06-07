@@ -78,7 +78,7 @@ $(document).ready(function() {
         var deviceId = $('#deviceId').val();
         var confirmed = confirm("Czy na pewno chcesz usunąć to urządzenie?");
     
-        if (confirmed) {
+        if (confirmed == true) {
             var data = {
                 device_id: deviceId
             };
