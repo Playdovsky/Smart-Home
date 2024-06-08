@@ -170,10 +170,8 @@
                     <div class="mb-3">
                         <label for="deviceName" class="form-label">Nazwa urządzenia</label>
                         <?php
-                            ini_set('display_errors', 1);
-                            ini_set('display_startup_errors', 1);
-                            error_reporting(E_ALL);
-
+                            session_start();
+                            
                             $user_id = $_SESSION['user_id'];
 
                             $servername = "localhost";
@@ -191,7 +189,7 @@
                             $result = $conn->query($sql);
                         ?>
 
-                        <select id="deviceName" required>
+                        <select id="deviceName" name="deviceName" class="form-control" required>
                             <?php
                                 while($row = $result->fetch_assoc()) {
                                     echo "<option value='" . $row['Nazwa'] . "'>" . $row['Nazwa'] . "</option>";

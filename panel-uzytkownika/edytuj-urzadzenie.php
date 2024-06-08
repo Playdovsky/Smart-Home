@@ -1,10 +1,6 @@
 <?php
     session_start();
 
-    if (!isset($_SESSION['user_id'])) {
-        die("Użytkownik nie jest zalogowany.");
-    }
-
     if (!isset($_POST['device_id'])) {
         die("Brak ID urządzenia.");
     }
