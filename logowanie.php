@@ -39,6 +39,10 @@
 
                 $conn = new mysqli($servername, $username, $password, $dbname);
 
+                if ($conn->connect_error) {
+                    die("Connection failed: " . $conn->connect_error);
+                }
+
                 $useremail = $_POST['email'];
                 $userpassword = $_POST['password'];
 
@@ -49,18 +53,31 @@
                 $salted_password2 = $hashed_password.$salt2;
                 $hashed_password2 = hash('sha256', $salted_password2);
 
-                $check = "SELECT * FROM tbl_Uzytkownicy WHERE Email = '$useremail' AND Haslo = '$hashed_password2' AND Dezaktywowany = 0";
-                $result = $conn->query($check);
+                $check = "SELECT u.ID_Uzytkownika, p.TypUprawnienia 
+                          FROM tbl_Uzytkownicy u 
+                          JOIN tbl_UprawnieniaUzytkownikow p ON u.ID_Uzytkownika = p.ID_Uzytkownika 
+                          WHERE u.Email = ? AND u.Haslo = ? AND u.Dezaktywowany = 0";
+                $stmt = $conn->prepare($check);
+                $stmt->bind_param("ss", $useremail, $hashed_password2);
+                $stmt->execute();
+                $result = $stmt->get_result();
 
                 if($result->num_rows > 0){
                   $row = $result->fetch_assoc();
                   $_SESSION['user_id'] = $row['ID_Uzytkownika'];
-                  header("Location: panel-uzytkownika/panel-uzytkownika.php");
+                  $_SESSION['user_role'] = $row['TypUprawnienia'];
+
+                  if ($row['TypUprawnienia'] == 'Admin') {
+                    header("Location: panel-administratora/panel-administratora.php");
+                  } else {
+                    header("Location: panel-uzytkownika/panel-uzytkownika.php");
+                  }
                   exit();
                 } else {
                   echo "<p style='color: red; text-align: center; margin-bottom: 10px;'><b>Nieprawidłowe dane logowania.</b></p>";
                 }
 
+                $stmt->close();
                 $conn->close();
               }
             ?>
