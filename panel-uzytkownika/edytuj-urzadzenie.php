@@ -1,5 +1,6 @@
 <?php
     session_start();
+    include('../user_check.php');
 
     if (!isset($_POST['device_id'])) {
         die("Brak ID urządzenia.");

@@ -1,5 +1,6 @@
 <?php
     session_start();
+    include('../user_check.php');
 
     if (!isset($_SESSION['user_id'])) {
         die("Użytkownik nie jest zalogowany.");

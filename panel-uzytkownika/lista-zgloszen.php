@@ -1,6 +1,7 @@
 <html lang="en">
     <?php
         session_start();
+        include('../user_check.php');
     ?>
 
     <head>

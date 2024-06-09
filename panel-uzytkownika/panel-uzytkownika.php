@@ -1,7 +1,8 @@
 <?php
-session_start();
-include('../user_check.php');
+    session_start();
+    include('../user_check.php');
 ?>
+
 <html lang="en">
 
     <head>
@@ -108,10 +109,10 @@ include('../user_check.php');
                     die("Connection failed: " . $conn->connect_error);
                 }
 
-                $sql = "SELECT su.ID_SprzetUzytkownika, us.Nazwa 
+                $sql = "SELECT su.ID_SprzetUzytkownika, ss.Nazwa, ss.Sciezka, us.Nazwa AS 'NazwaSprzetuUzytkownika'
                         FROM tbl_SprzetUzytkownikow su 
-                        JOIN tbl_UstawieniaSprzetu us
-                        ON su.ID_SprzetUzytkownika = us.ID_SprzetUzytkownika 
+                        JOIN tbl_SprzetSmart ss ON su.ID_SprzetSmart = ss.ID_SprzetSmart
+                        JOIN tbl_UstawieniaSprzetu us ON us.ID_SprzetUzytkownika = su.ID_SprzetUzytkownika
                         WHERE su.ID_Uzytkownika = ?";
 
                 $stmt = $conn->prepare($sql);
@@ -120,26 +121,27 @@ include('../user_check.php');
                 $result = $stmt->get_result();
 
                 echo '<div class="container px-4 px-lg-5 mt-5">';
-                    echo '<div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-3 justify-content-center">';
-                    while($row = $result->fetch_assoc()) {
-                        echo '<div class="col mb-5">
-                                <div class="card h-100">
-                                    <img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..." />
-                                    <div class="card-body p-4">
-                                        <div class="text-center">
-                                            <h5 class="fw-bolder text-black">' . htmlspecialchars($row['Nazwa']) . '</h5>
-                                        </div>
-                                    </div>
-                                    <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                                        <div class="text-center">
-                                            <a class="btn btn-outline-dark mt-auto showFormOptions" href="#" data-device-id="' . $row['ID_SprzetUzytkownika'] . '">Opcje</a>
-                                        </div>
+                echo '<div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-3 justify-content-center">';
+                while($row = $result->fetch_assoc()) {
+                    $image_path = !empty($row['Sciezka']) ? '../images/' . htmlspecialchars($row['Sciezka']) : 'https://dummyimage.com/450x300/dee2e6/6c757d.jpg';
+                    echo '<div class="col mb-5">
+                            <div class="card h-100">
+                                <img class="card-img-top custom-img" src="' . $image_path . '" alt="..." />
+                                <div class="card-body p-4">
+                                    <div class="text-center">
+                                        <h5 class="fw-bolder text-black">' . htmlspecialchars($row['NazwaSprzetuUzytkownika']) . '</h5>
                                     </div>
                                 </div>
-                            </div>';
-                    }
-                    
-                    echo '</div>';
+                                <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                                    <div class="text-center">
+                                        <a class="btn btn-outline-dark mt-auto showFormOptions" href="#" data-device-id="' . $row['ID_SprzetUzytkownika'] . '">Opcje</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>';
+                }
+                
+                echo '</div>';
                 echo '</div>';
 
                 $stmt->close();
@@ -170,9 +172,7 @@ include('../user_check.php');
                 <form action="dodawanie-urzadzenia.php" method="post">
                     <div class="mb-3">
                         <label for="deviceName" class="form-label">Nazwa urządzenia</label>
-                        <?php
-                            session_start();
-                            
+                        <?php                            
                             $user_id = $_SESSION['user_id'];
 
                             $servername = "localhost";
