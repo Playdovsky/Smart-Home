@@ -70,9 +70,9 @@ include('admin_check.php');
         <nav class="sidebar">
             <div class="nav-items">
                 <a href="">coś tu będzie</a>
-                <a href="">Użytkownicy</a>
+                <a href="dashboard_users.php">Użytkownicy</a>
                 <a href="">Urządzenia</a>
-                <a href="">Zgłoszenia</a>
+                <a href="dashboard_reports.php">Zgłoszenia</a>
             </div>
         </nav>
         <main>
