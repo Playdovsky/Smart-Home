@@ -5,7 +5,7 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
 if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] !== 'User') {
-    header("Location: logowanie.php");
+    header("Location: ../logowanie.php");
     exit();
 }
 ?>

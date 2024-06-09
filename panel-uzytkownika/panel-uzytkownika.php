@@ -1,6 +1,6 @@
 <?php
 session_start();
-include('user_check.php');
+include('../user_check.php');
 ?>
 <html lang="en">
 
