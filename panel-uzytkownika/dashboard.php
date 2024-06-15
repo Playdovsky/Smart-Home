@@ -34,7 +34,7 @@ include('admin_check.php');
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
             <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-2">
 
-                <li class="nav-item"><a class="nav-link active" aria-current="page" href="panel-administratora.php"><b>Widok użytkownika</b></a></li>
+                <li class="nav-item"><a class="nav-link active" aria-current="page" href="panel-uzytkownika.php"><b>Widok użytkownika</b></a></li>
 
                 <!--
                 <li class="nav-item dropdown">
@@ -71,7 +71,7 @@ include('admin_check.php');
             <div class="nav-items">
                 <a href="">coś tu będzie</a>
                 <a href="dashboard_users.php">Użytkownicy</a>
-                <a href="">Urządzenia</a>
+                <a href="dashboard_urzadzenia.php">Urządzenia</a>
                 <a href="dashboard_reports.php">Zgłoszenia</a>
             </div>
         </nav>

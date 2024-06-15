@@ -1,7 +1,23 @@
 <?php
     session_start();
+    include('../db_connection.php');
     include('../user_check.php');
+
+    // Sprawdź, czy użytkownik jest administratorem
+    $user_id = $_SESSION['user_id'];
+    $query = "SELECT u.Imie, up.TypUprawnienia 
+            FROM tbl_Uzytkownicy u
+            JOIN tbl_UprawnieniaUzytkownikow up ON u.ID_Uzytkownika = up.ID_Uzytkownika
+            WHERE u.ID_Uzytkownika = '$user_id'";
+    $result = $conn->query($query);
+    $row = $result->fetch_assoc();
+    $user_name = $row['Imie'];
+    $user_permission = $row['TypUprawnienia'];
+
+    // Przechowuj uprawnienia użytkownika w zmiennej sesyjnej
+    $_SESSION['user_permission'] = $user_permission;
 ?>
+
 
 <html lang="en">
 
@@ -54,6 +70,11 @@
 
                     <li class="nav-item"><a class="nav-link active" id="showForm" aria-current="page" href="#"><b>Dodaj urządzenie</b></a></li>
                     <li class="nav-item"><a class="nav-link active" aria-current="page" href="zglos-blad.php"><b>Zgłoś błąd</b></a></li>
+                    <?php
+                    if ($_SESSION['user_permission'] == 'Admin') {
+                        echo "<li class='nav-item'><a class='nav-link active' aria-current='page' href='dashboard.php'><b>Dashboard</b></a></li>";
+                    }
+                    ?>
                     <!--
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle text-white" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><b>Urządzenia</b></a>

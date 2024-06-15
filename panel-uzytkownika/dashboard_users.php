@@ -65,7 +65,7 @@ $conn->close();
         <a href="dashboard.php"><img src="../images/fevicon.png" id="logo-image" class="img-fluid"></a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
         <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-2">
-            <li class="nav-item"><a class="nav-link active" aria-current="page" href="panel-administratora.php"><b>Widok użytkownika</b></a></li>
+            <li class="nav-item"><a class="nav-link active" aria-current="page" href="panel-uzytkownika.php"><b>Widok użytkownika</b></a></li>
         </ul>
     </div>
     <div class="mx-md-5">
@@ -87,7 +87,7 @@ $conn->close();
         <div class="nav-items">
             <a href="">coś tu będzie</a>
             <a href="dashboard_users.php">Użytkownicy</a>
-            <a href="">Urządzenia</a>
+            <a href="dashboard_urzadzenia.php">Urządzenia</a>
             <a href="dashboard_reports.php">Zgłoszenia</a>
         </div>
     </nav>
@@ -132,7 +132,7 @@ $conn->close();
                             <td><?php echo htmlspecialchars($row['Email']); ?></td>
                             <td><?php echo $row['Dezaktywowany'] ? 'Tak' : 'Nie'; ?></td>
                             <td>
-                                <a href="profil-uzytkownika.php?id=<?php echo $row['ID_Uzytkownika']; ?>" class="btn btn-primary btn-sm">Edytuj</a>
+                                <a href="dashboard_profil-uzytkownika.php?id=<?php echo $row['ID_Uzytkownika']; ?>" class="btn btn-primary btn-sm">Edytuj</a>
                                 <?php if ($row['ID_Uzytkownika'] != $logged_in_user_id): ?>
                                     <form method="POST" style="display:inline;">
                                         <input type="hidden" name="user_id" value="<?php echo htmlspecialchars($row['ID_Uzytkownika']); ?>">

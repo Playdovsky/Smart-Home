@@ -67,12 +67,8 @@
                   $_SESSION['user_id'] = $row['ID_Uzytkownika'];
                   $_SESSION['user_role'] = $row['TypUprawnienia'];
 
-                  if ($row['TypUprawnienia'] == 'Admin') {
-                    header("Location: panel-administratora/panel-administratora.php");
-                  } else {
-                    header("Location: panel-uzytkownika/panel-uzytkownika.php");
-                  }
-                  exit();
+                  header("Location: panel-uzytkownika/panel-uzytkownika.php");
+
                 } else {
                   echo "<p style='color: red; text-align: center; margin-bottom: 10px;'><b>Nieprawidłowe dane logowania.</b></p>";
                 }
