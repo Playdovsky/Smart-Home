@@ -7,7 +7,6 @@ function getYear() {
 
 getYear();
 
-
 $('.custom_slick_slider').slick({
     slidesToShow: 1,
     slidesToScroll: 1,

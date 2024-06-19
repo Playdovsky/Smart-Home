@@ -4,7 +4,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Zmiana hasła</title>
-        <link rel="stylesheet" href="../css/style.css">
+        <link rel="stylesheet" href="../style.css">
         <link rel="icon" href="../images/fevicon.png" type="image/gif" />
     </head>
     <body>
@@ -34,8 +34,7 @@
                     
                     <?php
                         session_start();
-                        include('../user_check.php');
-                        
+
                         if (!isset($_SESSION['user_id'])) {
                             header("Location: ../logowanie.php");
                             exit();
@@ -56,9 +55,13 @@
                                 exit();
                             }
 
-                            include('../db_connection.php');
+                            $servername = "localhost";
+                            $username = "2025_mpalka21";
+                            $password = "palka_majczyk";
+                            $dbname = "2025_mpalka21";
 
                             try {
+                                $conn = new mysqli($servername, $username, $password, $dbname);
 
                                 if ($conn->connect_error) {
                                     throw new Exception("Błąd połączenia z bazą danych: " . $conn->connect_error);
@@ -122,6 +125,7 @@
                             }
                         }
                     ?>
+
                 </form>
             </div>
         </section>

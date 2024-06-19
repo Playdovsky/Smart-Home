@@ -3,7 +3,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Logowanie</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/ext-style.css">
     <link rel="icon" href="images/fevicon.png" type="image/gif" />
   </head>
   
@@ -32,16 +32,7 @@
             <?php
               if ($_SERVER["REQUEST_METHOD"] == "POST"){
                 session_start();
-                $servername = "localhost";
-                $username = "2025_mpalka21";
-                $password = "palka_majczyk";
-                $dbname = "2025_mpalka21";
-
-                $conn = new mysqli($servername, $username, $password, $dbname);
-
-                if ($conn->connect_error) {
-                    die("Connection failed: " . $conn->connect_error);
-                }
+                include('db_connection.php');
 
                 $useremail = $_POST['email'];
                 $userpassword = $_POST['password'];

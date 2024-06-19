@@ -4,9 +4,13 @@
     width: auto;
     margin-left: 25px;
   }
+
 }
 
-@media (max-width: 1300px) {
+@media (min-width: 1200px) {
+  .container {
+    max-width: 1170px;
+  }
 }
 
 @media (max-width: 1120px) {
@@ -27,19 +31,9 @@
     min-height: auto;
   }
 
-  .quote_btn-container a .login-link {
-    padding: 10px;
-    display: inline-block;
-  }
-
   .slider_section {
     padding-top: 45px;
     padding-bottom: 90px;
-  }
-
-  .quote_btn-container {
-    flex-direction: column;
-    align-items: center;
   }
 
   .navbar-brand{
@@ -186,10 +180,10 @@
   .carousel-inner{
     height: 85%;
   }
-}
 
-@media (min-width: 1200px) {
-  .container {
-    max-width: 1170px;
+  .img-box {
+    margin: 0 auto;
+    width: 20px;
+    height: auto;
   }
 }

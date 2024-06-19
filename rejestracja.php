@@ -4,7 +4,7 @@
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <title>Rejestracja</title>
-      <link rel="stylesheet" href="style.css">
+      <link rel="stylesheet" href="css/ext-style.css">
       <link rel="icon" href="images/fevicon.png" type="image/gif" />
   </head>
   <body>
@@ -48,18 +48,9 @@
 
               <?php
                 if ($_SERVER["REQUEST_METHOD"] == "POST"){
-                  $servername = "localhost";
-                  $username = "2025_mpalka21";
-                  $password = "palka_majczyk";
-                  $dbname = "2025_mpalka21";
+                  include('../db_connection.php');
 
                   try {
-                    $conn = new mysqli($servername, $username, $password, $dbname);
-                    
-                    if ($conn->connect_error) {
-                      throw new Exception("Connection failed: " . $conn->connect_error);
-                    }
-
                     $imie = $_POST['imie'];
                     $nazwisko = $_POST['nazwisko'];
                     $nrtel = $_POST['nrtelefonu'];

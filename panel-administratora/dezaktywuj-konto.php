@@ -1,13 +1,22 @@
 <?php
     session_start();
-    include('../db_connection.php');
-    include('../user_check.php');
 
     if (!isset($_SESSION['user_id'])) {
         die("Użytkownik nie jest zalogowany.");
     }
 
     $user_id = $_SESSION['user_id'];
+
+    $servername = "localhost";
+    $username = "2025_mpalka21";
+    $password = "palka_majczyk";
+    $dbname = "2025_mpalka21";
+
+    $conn = new mysqli($servername, $username, $password, $dbname);
+
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+    }
 
     $sql_update = "UPDATE tbl_Uzytkownicy SET Dezaktywowany = 1 WHERE ID_Uzytkownika = ?";
     $stmt_update = $conn->prepare($sql_update);

@@ -1,5 +1,14 @@
 <?php
-    include('../db_connection.php');
+    $servername = "localhost";
+    $username = "2025_mpalka21";
+    $password = "palka_majczyk";
+    $dbname = "2025_mpalka21";
+
+    $conn = new mysqli($servername, $username, $password, $dbname);
+
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+    }
 
     $device_id = isset($_GET['device_id']) ? intval($_GET['device_id']) : 0;
 

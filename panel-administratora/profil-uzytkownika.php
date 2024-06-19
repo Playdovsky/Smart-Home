@@ -1,23 +1,7 @@
 <html lang="en">
-<?php
-    session_start();
-    include('../db_connection.php');
-    include('../user_check.php');
-
-    // Sprawdź, czy użytkownik jest administratorem
-    $user_id = $_SESSION['user_id'];
-    $query = "SELECT u.Imie, up.TypUprawnienia 
-            FROM tbl_Uzytkownicy u
-            JOIN tbl_UprawnieniaUzytkownikow up ON u.ID_Uzytkownika = up.ID_Uzytkownika
-            WHERE u.ID_Uzytkownika = '$user_id'";
-    $result = $conn->query($query);
-    $row = $result->fetch_assoc();
-    $user_name = $row['Imie'];
-    $user_permission = $row['TypUprawnienia'];
-
-    // Przechowuj uprawnienia użytkownika w zmiennej sesyjnej
-    $_SESSION['user_permission'] = $user_permission;
-?>
+    <?php
+        session_start();
+    ?>
 
     <head>
         <meta charset="utf-8" />
@@ -41,10 +25,61 @@
         <script src="js/profil.js"></script>
     </head>
     <body>
-        <?php
-            include('naglowek.php');
-        ?>
+        <!-- Navigation-->
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <div class="container px-5 ms-xl-2">
+                <a href="panel-uzytkownika.php"><img src="../images/fevicon.png" id="logo-image" class="img-fluid"></a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-2">
 
+                    <?php
+                        $user_id = $_SESSION['user_id'];
+
+                        $servername = "localhost";
+                        $username = "2025_mpalka21";
+                        $password = "palka_majczyk";
+                        $dbname = "2025_mpalka21";
+
+                        $conn = new mysqli($servername, $username, $password, $dbname);
+
+                        $query = "SELECT Imie FROM tbl_Uzytkownicy WHERE ID_Uzytkownika = '$user_id'";
+                        $result = $conn->query($query);
+                        $row = $result->fetch_assoc();
+                        $user_name = $row['Imie'];
+
+                        echo "<li class='nav-item'><a class='nav-link active' aria-current='page' href='profil-uzytkownika.php'><b>$user_name</b></a></li>";
+                    ?>
+                    <li class="nav-item"><a class="nav-link active" id="showForm" aria-current="page" href="panel-uzytkownika.php"><b>Panel urządzeń</b></a></li>
+                    <li class="nav-item"><a class="nav-link active" aria-current="page" href="zglos-blad.php"><b>Zgłoś błąd</b></a></li>
+                    <!--
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle text-white" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><b>Urządzenia</b></a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="#!">Dodaj</a></li>
+                            <li><a class="dropdown-item" href="#!">Modyfikuj</a></li>
+                            <li><a class="dropdown-item" href="#!">Usuń</a></li>
+                        </ul>
+                    </li>
+                    -->
+                </ul>
+            </div>
+
+            <div class="mx-md-5">
+                <form method="post">
+                    <input type="submit" id="wylogowanie" value="Wyloguj się" name="logout">
+                </form>
+
+                <?php
+                    if(isset($_POST['logout'])) {
+                        $_SESSION = array();
+                        session_destroy();
+
+                        header("Location: ../index.php");
+                        exit();
+                    }
+                ?>
+            </div>
+        </nav>
         <!-- Header-->
         <header class="py-2" style="background-color: rgb(192, 192, 192);">
             <div class="container px-4 px-lg-5 my-5">
@@ -56,13 +91,24 @@
         </header>
 
         <?php
+            session_start();
+
             if (!isset($_SESSION['user_id'])) {
                 die("Użytkownik nie jest zalogowany.");
             }
 
             $user_id = $_SESSION['user_id'];
 
-            include('../db_connection.php');
+            $servername = "localhost";
+            $username = "2025_mpalka21";
+            $password = "palka_majczyk";
+            $dbname = "2025_mpalka21";
+
+            $conn = new mysqli($servername, $username, $password, $dbname);
+
+            if ($conn->connect_error) {
+                die("Connection failed: " . $conn->connect_error);
+            }
 
             $sql = "SELECT Imie, Nazwisko, NrTelefonu, Email FROM tbl_Uzytkownicy WHERE ID_Uzytkownika = ?";
             $stmt = $conn->prepare($sql);
@@ -139,7 +185,16 @@
                                                 throw new Exception("Nieprawidłowy adres email.");
                                             }
 
-                                            include('../db_connection.php');
+                                            $servername = "localhost";
+                                            $username = "2025_mpalka21";
+                                            $password = "palka_majczyk";
+                                            $dbname = "2025_mpalka21";
+
+                                            $conn = new mysqli($servername, $username, $password, $dbname);
+
+                                            if ($conn->connect_error) {
+                                                throw new Exception("Błąd połączenia z bazą danych: " . $conn->connect_error);
+                                            }
 
                                             $user_id = $_SESSION['user_id'];
 
@@ -185,6 +240,11 @@
                                             echo "<p style='color: red; text-align: center; margin-bottom: 10px;'><b>" . $e->getMessage() . "</b></p>";
                                         }
 
+                                        $stmt->close();
+                                        $updateStmt->close();
+                                        $conn->close();
+
+                                        header("Location: profil-uzytkownika.php");
                                         exit();
                                     }
                                 ?>

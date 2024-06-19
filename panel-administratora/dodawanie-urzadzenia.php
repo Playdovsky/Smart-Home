@@ -1,17 +1,26 @@
 <?php
     session_start();
-    include('../db_connection.php');
-    include('../user_check.php');
 
     $user_id = $_SESSION['user_id'];
+
+    $servername = "localhost";
+    $username = "2025_mpalka21";
+    $password = "palka_majczyk";
+    $dbname = "2025_mpalka21";
+
+    $conn = new mysqli($servername, $username, $password, $dbname);
+
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+    }
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (isset($_POST['deviceName']) && isset($_POST['deviceNumber'])) {
             $device_name = $_POST['deviceName'];
             $device_number = $_POST['deviceNumber'];
 
-            echo "Device Name: $device_name<br>";
-            echo "Device Number: $device_number<br>";
+            echo "Device Name: $device_name<br>"; // Debugging line
+            echo "Device Number: $device_number<br>"; // Debugging line
 
             $stmt_device = $conn->prepare("SELECT ID_SprzetSmart FROM tbl_SprzetSmart WHERE Nazwa = ?");
             $stmt_device->bind_param("s", $device_name);
@@ -22,7 +31,7 @@
                 $row_device = $result_device->fetch_assoc();
                 $device_id = $row_device['ID_SprzetSmart'];
                 
-                echo "Device ID: $device_id<br>";
+                echo "Device ID: $device_id<br>"; // Debugging line
 
                 $stmt_insert_device = $conn->prepare("INSERT INTO tbl_SprzetUzytkownikow (ID_SprzetSmart, ID_Uzytkownika) VALUES (?, ?)");
                 $stmt_insert_device->bind_param("ii", $device_id, $user_id);
@@ -37,7 +46,7 @@
                     $row_inserted_device_id = $result_inserted_device_id->fetch_assoc();
                     $last_inserted_device_id = $row_inserted_device_id['ID_SprzetUzytkownika'];
 
-                    echo "Last Inserted Device User ID: $last_inserted_device_id<br>";
+                    echo "Last Inserted Device User ID: $last_inserted_device_id<br>"; // Debugging line
 
                     $stmt_settings = $conn->prepare("SELECT Nazwa, WartoscLiczbowa, KolorPodswietlenia FROM tbl_DomyslneUstawieniaSprzetu WHERE ID_SprzetSmart = ?");
                     $stmt_settings->bind_param("i", $device_id);
@@ -49,7 +58,7 @@
                         $setting_value = $row_settings['WartoscLiczbowa'];
                         $setting_color = $row_settings['KolorPodswietlenia'];
 
-                        echo "Inserting setting: $setting_name, $setting_value, $setting_color<br>";
+                        echo "Inserting setting: $setting_name, $setting_value, $setting_color<br>"; // Debugging line
 
                         $stmt_insert_settings = $conn->prepare("INSERT INTO tbl_UstawieniaSprzetu (ID_SprzetUzytkownika, Nazwa, WartoscLiczbowa, KolorPodswietlenia) VALUES (?, ?, ?, ?)");
                         $stmt_insert_settings->bind_param("isss", $last_inserted_device_id, $setting_name, $setting_value, $setting_color);
@@ -78,6 +87,7 @@
 
     $conn->close();
 
+    // Redirect to the user panel only if no errors occurred
     header("Location: panel-uzytkownika.php");
     exit();
 ?>

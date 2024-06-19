@@ -606,14 +606,6 @@ progress {
   height: auto;
 }
 
-.custom-img {
-  width: 100%;
-  height: 200px;
-  object-fit: contain;
-  background-color: #f8f9fa;
-  padding: 10px;
-}
-
 .img-thumbnail {
   padding: 0.25rem;
   background-color: #fff;
@@ -10941,8 +10933,4 @@ main {
 .users button:hover {
 	background-color: #c82333;
 }
-
-
-
-
 

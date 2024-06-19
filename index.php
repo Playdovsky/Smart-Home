@@ -20,6 +20,7 @@
     <link href="css/style.css" rel="stylesheet" />
     <!-- responsive style -->
     <link href="css/responsive.css" rel="stylesheet" />
+
   </head>
 
   <body>
@@ -33,16 +34,14 @@
               SMART FUTURE
             </span>
           </a>
-          <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <div class="d-flex mx-auto flex-column flex-lg-row align-items-center">
-            </div>
-            <div class="quote_btn-container">
-              <a href="">
-                <span>
-                  <a href="logowanie.php" id="login-link">Logowanie</a>
-                </span>
-              </a>
-            </div>
+          <div class="d-flex mx-auto flex-column flex-lg-row align-items-center">
+          </div>
+          <div class="quote_btn-container">
+            <a href="">
+              <span>
+                <a href="logowanie.php" id="login-link">Logowanie</a>
+              </span>
+            </a>
           </div>
         </nav>
       </header>

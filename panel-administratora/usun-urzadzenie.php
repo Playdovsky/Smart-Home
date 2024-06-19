@@ -1,7 +1,5 @@
 <?php
     session_start();
-    include('../db_connection.php');
-    include('../user_check.php');
 
     if (!isset($_SESSION['user_id'])) {
         die("Użytkownik nie jest zalogowany.");
@@ -14,6 +12,17 @@
     $device_id = $_POST['device_id'];
 
     $user_id = $_SESSION['user_id'];
+
+    $servername = "localhost";
+    $username = "2025_mpalka21";
+    $password = "palka_majczyk";
+    $dbname = "2025_mpalka21";
+
+    $conn = new mysqli($servername, $username, $password, $dbname);
+
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+    }
 
     $sql_delete_settings = "DELETE FROM tbl_UstawieniaSprzetu WHERE ID_SprzetUzytkownika = ?";
     $stmt_delete_settings = $conn->prepare($sql_delete_settings);
