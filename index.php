@@ -1,3 +1,17 @@
+<?php
+  if (!file_exists("db_connection.php")) {
+    header("Location: install.php");
+    exit;
+  }
+
+  include "db_connection.php";
+
+  if (!$link) {
+    header("Location: install.php");
+    exit;
+  }
+?>
+
 <html>
   <head>
     <meta charset="utf-8" />
