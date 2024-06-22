@@ -10,7 +10,7 @@ $logged_in_user_id = $_SESSION['user_id'];
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if(isset($_POST['id']) && isset($_POST['status'])) {
         $id = $_POST['id'];
-        $status = $_POST['status'] ? 1 : 0;
+        $status = $_POST['status'];
 
         $sql = "UPDATE tbl_Zgloszenia SET Status = $status WHERE ID_Zgloszenia = $id";
         $result = $conn->query($sql);
@@ -39,6 +39,7 @@ $conn->close();
 ?>
 
 
+<!DOCTYPE html>
 <html lang="pl">
 <head>
     <meta charset="utf-8" />
@@ -84,7 +85,7 @@ $conn->close();
 <div class="wrapper">
     <nav class="sidebar">
         <div class="nav-items">
-            <a href="">coś tu będzie</a>
+            <a href="dashboard.php">Wiadomości</a>
             <a href="dashboard_users.php">Użytkownicy</a>
             <a href="dashboard_urzadzenia.php">Urządzenia</a>
             <a href="dashboard_reports.php">Zgłoszenia</a>
@@ -94,42 +95,66 @@ $conn->close();
         <h2>Dashboard</h2>
         <h3>Zgłoszenia</h3>
         <table class="table-bordered">
-    <thead>
-        <tr>
-            <th>Data zgłoszenia</th>
-            <th>Kontakt</th>
-            <th>Typ</th>
-            <th>Opis</th>
-            <th>Wykonane</th>
-        </tr>
-    </thead>
-    <tbody>
-        <?php if ($result->num_rows > 0): ?>
-            <?php while($row = $result->fetch_assoc()): ?>
+            <thead>
                 <tr>
-                    <td><?php echo htmlspecialchars($row['DataZgloszenia']); ?></td>
-                    <td>
-                        <?php echo htmlspecialchars($row['Imie']) . ' ' . htmlspecialchars($row['Nazwisko']); ?><br>
-                        <?php echo htmlspecialchars($row['NrTelefonu']); ?><br>
-                        <?php echo htmlspecialchars($row['Email']); ?>
-                    </td>
-                    <td><?php echo htmlspecialchars($row['Typ']); ?></td>
-                    <td><?php echo htmlspecialchars($row['Opis']); ?></td>
-                    <td>
-                        <form method="post">
-                            <input type="hidden" name="id" value="<?php echo $row['ID_Zgloszenia']; ?>">
-                            <input type="checkbox" name="status" <?php echo $row['Status'] ? 'checked' : ''; ?> onchange="this.form.submit()">
-                        </form>
-                    </td>
+                    <th>Data zgłoszenia</th>
+                    <th>Kontakt</th>
+                    <th>Typ</th>
+                    <th>Opis</th>
+                    <th>Status</th>
+                    <th>Akcje</th>
                 </tr>
-            <?php endwhile; ?>
-        <?php else: ?>
-            <tr>
-                <td colspan="5" class="text-center">Brak zgłoszeń</td>
-            </tr>
-        <?php endif; ?>
-    </tbody>
-</table>
+            </thead>
+            <tbody>
+                <?php if ($result->num_rows > 0): ?>
+                    <?php while($row = $result->fetch_assoc()): ?>
+                        <tr>
+                            <td><?php echo htmlspecialchars($row['DataZgloszenia']); ?></td>
+                            <td>
+                                <?php echo htmlspecialchars($row['Imie']) . ' ' . htmlspecialchars($row['Nazwisko']); ?><br>
+                                <?php echo htmlspecialchars($row['NrTelefonu']); ?><br>
+                                <?php echo htmlspecialchars($row['Email']); ?>
+                            </td>
+                            <td><?php echo htmlspecialchars($row['Typ']); ?></td>
+                            <td><?php echo htmlspecialchars($row['Opis']); ?></td>
+                            <td>
+                                <?php 
+                                    switch ($row['Status']) {
+                                        case 0:
+                                            echo "Oczekuje";
+                                            break;
+                                        case 1:
+                                            echo "Zrobione";
+                                            break;
+                                        case 2:
+                                            echo "Odrzucono";
+                                            break;
+                                    }
+                                ?>
+                            </td>
+                            <td>
+                                <form method="post">
+                                    <input type="hidden" name="id" value="<?php echo $row['ID_Zgloszenia']; ?>">
+                                    <?php if ($row['Status'] != 0): ?>
+                                        <button type="submit" name="status" value="0" class="btn btn-warning">Oczekuje</button>
+                                    <?php endif; ?>
+                                    <?php if ($row['Status'] != 1): ?>
+                                        <button type="submit" name="status" value="1" class="btn btn-success">Zrobione</button>
+                                    <?php endif; ?>
+                                    <?php if ($row['Status'] != 2): ?>
+                                        <button type="submit" name="status" value="2" class="btn btn-danger">Odrzucono</button>
+                                    <?php endif; ?>
+                                </form>
+                            </td>
+                        </tr>
+                    <?php endwhile; ?>
+                <?php else: ?>
+                    <tr>
+                        <td colspan="6" class="text-center">Brak zgłoszeń</td>
+                    </tr>
+                <?php endif; ?>
+            </tbody>
+        </table>
     </main>
 </div>
 </body>
