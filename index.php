@@ -1,14 +1,26 @@
 <?php
   if (!file_exists("db_connection.php")) {
-    header("Location: install.php");
-    exit;
+    if(file_exists("install.php")){
+      header("Location: install.php");
+      exit;
+    }
+    else{
+      echo "Błąd połączenia";
+      exit;
+    }
   }
 
   include "db_connection.php";
 
-  if (!$link) {
-    header("Location: install.php");
-    exit;
+  if (!$conn) {
+    if(file_exists("install.php")){
+      header("Location: install.php");
+      exit;
+    }
+    else{
+      echo "Błąd połączenia";
+      exit;
+    }
   }
 ?>
 
@@ -43,7 +55,7 @@
       <header class="header_section long_section px-0">
         <nav class="navbar navbar-expand-lg custom_nav-container">
           <img src="images/fevicon.png" id="logo-image">
-          <a class="navbar-brand" href="index.html">
+          <a class="navbar-brand" href="index.php">
             <span>
               SMART FUTURE
             </span>

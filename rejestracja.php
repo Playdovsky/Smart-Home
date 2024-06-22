@@ -48,7 +48,7 @@
 
               <?php
                 if ($_SERVER["REQUEST_METHOD"] == "POST"){
-                  include('../db_connection.php');
+                  include('db_connection.php');
 
                   try {
                     $imie = $_POST['imie'];
