@@ -1,14 +1,4 @@
 <?php
-    $insert[] = "INSERT INTO `tbl_DomyslneUstawieniaSprzetu` (`ID_DomyslnegoUstawieniaSprzetu`, `ID_SprzetSmart`, `Nazwa`, `WartoscLiczbowa`, `KolorPodswietlenia`) VALUES
-    (1, 1, 'Termostat', 21, 'Czerwony'),
-    (2, 2, 'Żarówka', 80, 'Biały'),
-    (3, 3, 'Zamek', 1234, 'Niebieski'),
-    (4, 4, 'Video dzwonek', 50, 'Niebieski'),
-    (5, 5, 'Czujnik dymu', 1, 'Czerwony'),
-    (6, 6, 'Kamera', 1, 'Niebieski'),
-    (7, 21, 'Czujnik ruchu', 20, 'Różowy'),
-    (8, 22, 'TestNazwa', 50, 'Żółty');";
-
     $insert[] = "INSERT INTO `tbl_SprzetSmart` (`ID_SprzetSmart`, `Typ`, `Nazwa`, `Sciezka`) VALUES
     (1, 'Komfort', 'Termostat', 'Termostat.png'),
     (2, 'Komfort', 'Żarówka', 'Zarowka.png'),
@@ -26,4 +16,13 @@
     (5, 5, 'Czy natychmiast powiadamiać straż?', 'checkbox'),
     (6, 6, 'Automatyczne śledzenie ruchu', 'checkbox'),
     (15, 21, 'Czułość wykrywania', 'slider');";
+
+    $insert[] = "INSERT INTO `tbl_DomyslneUstawieniaSprzetu` (`ID_DomyslnegoUstawieniaSprzetu`, `ID_SprzetSmart`, `Nazwa`, `WartoscLiczbowa`, `KolorPodswietlenia`) VALUES
+    (1, 1, 'Termostat', 21, 'Czerwony'),
+    (2, 2, 'Żarówka', 80, 'Biały'),
+    (3, 3, 'Zamek', 1234, 'Niebieski'),
+    (4, 4, 'Video dzwonek', 50, 'Niebieski'),
+    (5, 5, 'Czujnik dymu', 1, 'Czerwony'),
+    (6, 6, 'Kamera', 1, 'Niebieski'),
+    (7, 21, 'Czujnik ruchu', 20, 'Różowy')";
 ?>

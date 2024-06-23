@@ -6,6 +6,17 @@
     box-sizing: border-box;
     font-family: 'Ubuntu', sans-serif;
 }
+p {
+    margin: 10px;
+    line-height: 1.6;
+    text-align: justify;
+}
+.instructions {
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background-color: #f9f9f9;
+    border-radius: 8px;
+}
 :root
 {
     --black: #2f2f2f;

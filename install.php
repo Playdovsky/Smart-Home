@@ -113,6 +113,7 @@
                         for ($i = 0; $i < count($create); $i++) {
                             mysqli_query($conn, $create[$i]);
                         }
+                        echo "<p>Struktura bazy danych została utworzona.</p>";
                         
                         echo "<form method='post'>
                                 <input type='hidden' name='step' value='4'>
@@ -133,6 +134,8 @@
                         for ($i = 0; $i < count($insert); $i++) {
                             mysqli_query($conn, $insert[$i]);
                         }
+                        echo "<p>Dane zostały pomyślnie zaimportowane do bazy.</p>";
+
                         echo "<form method='post'>
                                 <input type='hidden' name='step' value='5'>
                                 <input type='submit' value='Krok 5'>
@@ -287,7 +290,8 @@
                     echo "<br>";
                     echo "<h3>Ostatnie szlify</h3>";
                     echo "<p>1. Zmień prawa dostępu do db_connection.php<br>np. chmod o-w " . $config_file . "</p>";
-                    echo "<p>2. Gdy będziesz pewny, że aplikacja działa poprawnie pamiętaj aby usunąć install.php<br>np. rm install.php.</p>";
+                    echo "<p>2. Zmień prawa dostępu do katalogu images<br>np. chmod o+rwx images</p>";
+                    echo "<p>3. Gdy będziesz pewny, że aplikacja działa poprawnie pamiętaj aby usunąć install.php<br>np. rm install.php.</p>";
                     echo "<br>";
                     echo "<p>Aplikacja internetowa jest już zainstalowana i gotowa do działania, poniższy link pozwoli ci się do niej przenieść</p>";
                     echo "<a href='index.php'>Strona główna</a>";
@@ -320,14 +324,18 @@
                                 $step = 1;
                                 form_install_1();
                             } else {
-                                echo "<p>Zmień uprawnienia do pliku <code>".$config_file."</code><br>np. <code>chmod o+w ".$config_file."</code></p>";
+                                echo "<div class='instructions'>";
+                                echo "<p>Zmień uprawnienia do pliku " . $config_file . "<br>np. chmod o+w ".$config_file."</p>";
                                 echo "<br>";
-                                echo "<p>Gdy to zrobisz odśwież stronę klikając przycisk strzałki w lewym górnym rogu lub przycisk 'F5'</p>";
+                                echo "<p>Gdy to zrobisz odśwież stronę klikając przycisk '<b>F5</b>' lub przycisk zaokrąglonej strzałki w lewym górnym rogu przeglądarki.</p>";
+                                echo "</div>";
                             }
                         } else {
-                            echo "<p>Stwórz plik <code>".$config_file."</code><br>np. <code>touch ".$config_file."</code></p>";
+                            echo "<div class='instructions'>";
+                            echo "<p>Stwórz plik " . $config_file . "<br>np. touch ".$config_file."</p>";
                             echo "<br>";
-                            echo "<p>Gdy to zrobisz odśwież stronę klikając przycisk strzałki w lewym górnym rogu lub przycisk 'F5'</p>";
+                            echo "<p>Gdy to zrobisz odśwież stronę klikając przycisk '<b>F5</b>' lub przycisk zaokrąglonej strzałki w lewym górnym rogu przeglądarki.</p>";
+                            echo "</div>";
                         }
                         break;
                 }
