@@ -30,7 +30,7 @@
                     echo '<li class="nav-item"><a class="nav-link active" aria-current="page" href="zglos-blad.php"><b>Zgłoś błąd</b></a></li>';
                 
                 if ($_SESSION['user_permission'] == 'Admin') {
-                    echo "<li class='nav-item'><a class='nav-link active' aria-current='page' href='dashboard.php'><b>Dashboard</b></a></li>";
+                    echo "<li class='nav-item'><a class='nav-link active' aria-current='page' href='dashboard_users.php'><b>Dashboard</b></a></li>";
                 }
                 ?>
             </ul>

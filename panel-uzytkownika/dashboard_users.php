@@ -85,7 +85,6 @@ $conn->close();
 <div class="wrapper">
     <nav class="sidebar">
         <div class="nav-items">
-            <a href="dashboard.php">Wiadomości</a>
             <a href="dashboard_users.php">Użytkownicy</a>
             <a href="dashboard_urzadzenia.php">Urządzenia</a>
             <a href="dashboard_reports.php">Zgłoszenia</a>

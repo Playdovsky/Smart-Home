@@ -3,19 +3,44 @@ session_start();
 include('../admin_check.php');
 include('../db_connection.php');
 
-// Pobierz istniejące dane urządzenia, jeśli jest przekazywane ID urządzenia
-$device_id = $_GET['id'] ?? null;
-
-// Pobierz dane urządzenia na podstawie przekazanego ID
-if ($device_id) {
-    $sql = "SELECT * FROM tbl_SprzetSmart WHERE ID_SprzetSmart=?";
-    $stmt = mysqli_prepare($conn, $sql);
-    mysqli_stmt_bind_param($stmt, "i", $device_id);
-    mysqli_stmt_execute($stmt);
-    $result = mysqli_stmt_get_result($stmt);
-    $device = mysqli_fetch_assoc($result);
+// Sprawdzenie, czy przekazano ID w parametrze URL
+if (!isset($_GET['id'])) {
+    die("Nieprawidłowy parametr ID.");
 }
 
+$id = $_GET['id'];
+
+// Pobranie istniejących danych sprzętu z bazy danych
+$sql = "SELECT s.Typ, s.Nazwa, s.Sciezka, d.WartoscLiczbowa, d.KolorPodswietlenia, w.NazwaWartosci, w.Typ AS TypWartosci 
+        FROM tbl_SprzetSmart s
+        LEFT JOIN tbl_WartoscSprzetSmart w ON s.ID_SprzetSmart = w.ID_SprzetSmart
+        LEFT JOIN tbl_DomyslneUstawieniaSprzetu d ON s.ID_SprzetSmart = d.ID_SprzetSmart
+        WHERE s.ID_SprzetSmart = ?";
+$stmt = mysqli_prepare($conn, $sql);
+mysqli_stmt_bind_param($stmt, "i", $id);
+mysqli_stmt_execute($stmt);
+$result = mysqli_stmt_get_result($stmt);
+
+if (!$result) {
+    die("Błąd w pobieraniu danych sprzętu: " . mysqli_error($conn));
+}
+
+// Sprawdzenie, czy pobrano jakiekolwiek dane
+if (mysqli_num_rows($result) == 0) {
+    die("Nie znaleziono sprzętu o podanym ID.");
+}
+
+$row = mysqli_fetch_assoc($result);
+
+$typ = $row['Typ'];
+$nazwa = $row['Nazwa'];
+$sciezka = $row['Sciezka'];
+$wartosc_liczbowa = $row['WartoscLiczbowa'];
+$kolor_podswietlenia = $row['KolorPodswietlenia'];
+$nazwa_wartosci = $row['NazwaWartosci'];
+$typ_wartosci = $row['TypWartosci'];
+
+// Obsługa przesłania formularza
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $typ = $_POST['typ'];
     $nazwa = $_POST['nazwa'];
@@ -24,85 +49,35 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $nazwa_wartosci = $_POST['nazwa_wartosci'];
     $typ_wartosci = $_POST['typ_wartosci'];
 
-    // Sprawdzenie i zapisanie pliku zdjęcia
-    $target_dir = "../images/";
-    $target_file = $target_dir . basename($_FILES["zdjecie"]["name"]);
-    $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
-    $uploadOk = 1;
+    // Aktualizacja istniejących danych w bazie danych
+    $sql_update_sprzet = "UPDATE tbl_SprzetSmart SET Typ = ?, Nazwa = ? WHERE ID_SprzetSmart = ?";
+    $stmt_update_sprzet = mysqli_prepare($conn, $sql_update_sprzet);
+    mysqli_stmt_bind_param($stmt_update_sprzet, "ssi", $typ, $nazwa, $id);
+    mysqli_stmt_execute($stmt_update_sprzet);
 
-    // Sprawdzenie, czy plik jest obrazem
-    $check = getimagesize($_FILES["zdjecie"]["tmp_name"]);
-    if ($check !== false) {
-        $uploadOk = 1;
-    } else {
-        echo "Plik nie jest obrazem.";
-        $uploadOk = 0;
-    }
+    $sql_update_wartosc = "UPDATE tbl_WartoscSprzetSmart SET NazwaWartosci = ?, Typ = ? WHERE ID_SprzetSmart = ?";
+    $stmt_update_wartosc = mysqli_prepare($conn, $sql_update_wartosc);
+    mysqli_stmt_bind_param($stmt_update_wartosc, "ssi", $nazwa_wartosci, $typ_wartosci, $id);
+    mysqli_stmt_execute($stmt_update_wartosc);
 
-    // Sprawdzenie rozmiaru pliku
-    if ($_FILES["zdjecie"]["size"] > 5000000) { // 5MB limit
-        echo "Plik jest za duży.";
-        $uploadOk = 0;
-    }
+    $sql_update_domyslne = "UPDATE tbl_DomyslneUstawieniaSprzetu SET WartoscLiczbowa = ?, KolorPodswietlenia = ? WHERE ID_SprzetSmart = ?";
+    $stmt_update_domyslne = mysqli_prepare($conn, $sql_update_domyslne);
+    mysqli_stmt_bind_param($stmt_update_domyslne, "dsi", $wartosc_liczbowa, $kolor_podswietlenia, $id);
+    mysqli_stmt_execute($stmt_update_domyslne);
 
-    // Zezwolenie tylko na określone formaty plików
-    if ($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg") {
-        echo "Dozwolone są tylko pliki JPG, JPEG i PNG.";
-        $uploadOk = 0;
-    }
-
-    // Sprawdzenie, czy $uploadOk jest ustawione na 0 przez błąd
-    if ($uploadOk == 0) {
-        echo "Plik nie został przesłany.";
-    } else {
-        if (move_uploaded_file($_FILES["zdjecie"]["tmp_name"], $target_file)) {
-            echo "Plik ". basename($_FILES["zdjecie"]["name"]). " został przesłany.";
-
-            // Rozpoczęcie transakcji
-            mysqli_begin_transaction($conn);
-
-            try {
-                // Aktualizacja danych w tabeli tbl_SprzetSmart
-                $sciezka = basename($_FILES["zdjecie"]["name"]);
-                $sql = "UPDATE tbl_SprzetSmart SET Typ=?, Nazwa=?, Sciezka=? WHERE ID=?";
-                $stmt = mysqli_prepare($conn, $sql);
-                mysqli_stmt_bind_param($stmt, "sssi", $typ, $nazwa, $sciezka, $_POST['device_id']);
-                mysqli_stmt_execute($stmt);
-
-                // Aktualizacja danych w tabeli tbl_DomyslneUstawieniaSprzetu
-                $sql2 = "UPDATE tbl_DomyslneUstawieniaSprzetu SET Nazwa=?, WartoscLiczbowa=?, KolorPodswietlenia=? WHERE ID_SprzetSmart=?";
-                $stmt2 = mysqli_prepare($conn, $sql2);
-                mysqli_stmt_bind_param($stmt2, "sdsi", $nazwa, $wartosc_liczbowa, $kolor_podswietlenia, $_POST['device_id']);
-                mysqli_stmt_execute($stmt2);
-
-                // Aktualizacja danych w tabeli tbl_WartoscSprzetSmart
-                $sql3 = "UPDATE tbl_WartoscSprzetSmart SET NazwaWartosci=?, Typ=? WHERE ID_SprzetSmart=?";
-                $stmt3 = mysqli_prepare($conn, $sql3);
-                mysqli_stmt_bind_param($stmt3, "ssi", $nazwa_wartosci, $typ_wartosci, $_POST['device_id']);
-                mysqli_stmt_execute($stmt3);
-
-                // Zakończenie transakcji
-                mysqli_commit($conn);
-
-                echo "Sprzęt został pomyślnie zaktualizowany.";
-            } catch (Exception $e) {
-                mysqli_rollback($conn);
-                echo "Błąd: " . $e->getMessage();
-            } finally {
-                mysqli_stmt_close($stmt);
-                mysqli_stmt_close($stmt2);
-                mysqli_stmt_close($stmt3);
-            }
-        } else {
-            echo "Wystąpił błąd podczas przesyłania pliku.";
-        }
-    }
+    header("Location: dashboard_urzadzenia.php");
+    exit();
 }
+
+// Zamknięcie zapytań i połączenia z bazą danych
+mysqli_stmt_close($stmt);
+mysqli_close($conn);
 ?>
 
+<!DOCTYPE html>
 <html lang="pl">
 <head>
-    <meta charset="utf-8" />
+<meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta name="keywords" content="Smart Home, Future, Device, Devices, Dashboard" />
     <meta name="description" content="Smart Home internet application" />
@@ -116,7 +91,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <link href="../css/responsive.css?v=1.0" rel="stylesheet" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="js/profil.js"></script>
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -144,52 +118,46 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <header class="py-2" style="background-color: rgb(192, 192, 192);">
         <div class="container px-4 px-lg-5 my-5">
             <div class="text-center">
-                <h1 class="display-4 fw-bolder text-black">Dodawanie nowego sprzętu</h1>
+                <h1 class="display-4 fw-bolder text-black">Edycja sprzętu</h1>
             </div>
         </div>
     </header>
- 
-    <section class="py-5">
-        <div class="container mt-5">
-        <a class="nav-link active mb-3" aria-current="page" href="dashboard_urzadzenia.php"><b>< Cofnij</b></a>
- 
-        <h2>Dodaj Nowy Sprzęt</h2>
-        <form id="addDeviceForm" method="POST" enctype="multipart/form-data" action="">
-            <div class="mb-3">
-                <label class="form-label">Typ:</label>
-                <input type="text" class="form-control" name="typ" required>
+    <div class="container mt-5">
+        <a class="nav-link active mb-3" aria-current="page" href="dashboard_urzadzenia.php"><b>< Powrót</b></a>
+
+        <h2>Edytuj Sprzęt</h2>
+        <form id="editDeviceForm" method="POST" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="typ">Typ:</label>
+                <input type="text" class="form-control" id="typ" name="typ" value="<?php echo htmlspecialchars($typ); ?>" required>
             </div>
-            <div class="mb-3">
-                <label class="form-label">Nazwa:</label>
-                <input type="text" class="form-control" name="nazwa" required>
+            <div class="form-group">
+                <label for="nazwa">Nazwa:</label>
+                <input type="text" class="form-control" id="nazwa" name="nazwa" value="<?php echo htmlspecialchars($nazwa); ?>" required>
             </div>
-            <div class="mb-3">
-                <label class="form-label">Zdjęcie:</label>
-                <input type="file" class="form-control" name="zdjecie" accept="image/*" required>
+            <div class="form-group">
+                <label for="wartosc_liczbowa">Wartość Liczbowa:</label>
+                <input type="number" class="form-control" id="wartosc_liczbowa" name="wartosc_liczbowa" value="<?php echo htmlspecialchars($wartosc_liczbowa); ?>" required>
             </div>
-            <div class="mb-3">
-                <label class="form-label">Wartość Liczbowa:</label>
-                <input type="number" class="form-control" name="wartosc_liczbowa" required>
+            <div class="form-group">
+                <label for="kolor_podswietlenia">Kolor Podświetlenia:</label>
+                <input type="text" class="form-control" id="kolor_podswietlenia" name="kolor_podswietlenia" value="<?php echo htmlspecialchars($kolor_podswietlenia); ?>" required>
             </div>
-            <div class="mb-3">
-                <label class="form-label">Kolor Podświetlenia:</label>
-                <input type="text" class="form-control" name="kolor_podswietlenia" required>
+            <div class="form-group">
+                <label for="nazwa_wartosci">Nazwa Wartości (Wartość Sprzęt Smart):</label>
+                <input type="text" class="form-control" id="nazwa_wartosci" name="nazwa_wartosci" value="<?php echo htmlspecialchars($nazwa_wartosci); ?>" required>
             </div>
-            <div class="mb-3">
-                <label class="form-label">Nazwa Wartości (Wartość Sprzęt Smart):</label>
-                <input type="text" class="form-control" name="nazwa_wartosci" required>
-            </div>
-            <div class="mb-3">
-                <label class="form-label">Typ:</label>
-                <select class="form-control" name="typ_wartosci" required>
-                    <option value="slider">Slider</option>
-                    <option value="text">Text</option>
-                    <option value="checkbox">Checkbox</option>
+            <div class="form-group mb-3">
+                <label for="typ_wartosci">Typ:</label>
+                <select class="form-control" id="typ_wartosci" name="typ_wartosci" required>
+                    <option value="slider" <?php if ($typ_wartosci == 'slider') echo 'selected'; ?>>Slider</option>
+                    <option value="text" <?php if ($typ_wartosci == 'text') echo 'selected'; ?>>Text</option>
+                    <option value="checkbox" <?php if ($typ_wartosci == 'checkbox') echo 'selected'; ?>>Checkbox</option>
                 </select>
             </div>
-            <button type="submit" class="btn btn-primary">Dodaj Sprzęt</button>
+
+            <button type="submit" class="btn btn-primary">Zapisz zmiany</button>
         </form>
-        </div>
-    </section>
+    </div>
 </body>
 </html>
